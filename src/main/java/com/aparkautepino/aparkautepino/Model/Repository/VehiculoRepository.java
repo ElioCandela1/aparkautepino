@@ -12,6 +12,4 @@ public interface VehiculoRepository extends JpaRepository<Vehiculo, Integer>{
 
     Optional<Vehiculo> findById(int id);
 
-    Optional<Vehiculo> findByPlaca(String placa);
-
 }
