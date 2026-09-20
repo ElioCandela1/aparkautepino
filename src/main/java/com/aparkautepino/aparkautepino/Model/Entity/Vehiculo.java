@@ -1,4 +1,4 @@
-package com.aparkautepino.aparkautepino.Entity;
+package com.aparkautepino.aparkautepino.Model.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
