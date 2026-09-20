@@ -78,20 +78,25 @@ button {
   --color-borde: #26344D;
 }
 
-body{
-    background-color: var(--color-fondo-primario);
-    font-family: 'Inter', sans-serif;
+body {
+  background-color: var(--color-fondo-primario);
+  font-family: 'Inter', sans-serif;
 }
 
-.card{
+.card {
   background-color: var(--color-tarjetas);
 }
 
-h1, h2, h3, h4, h5, h6{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--color-texto-principal) !important;
 }
 
-p{
+p {
   color: var(--color-texto-secundario);
 }
 
@@ -101,17 +106,17 @@ label {
 
 /* Inputs*/
 
-input.form-control{
+input.form-control {
   background-color: var(--color-tarjetas);
   color: var(--color-texto-principal);
   border: 1px solid var(--color-borde)
 }
 
-input.form-control::placeholder{
+input.form-control::placeholder {
   color: var(--color-texto-secundario);
 }
 
-input.form-control:focus{
+input.form-control:focus {
   background-color: var(--color-tarjetas);
   color: var(--color-texto-principal);
   outline: none;
@@ -119,9 +124,9 @@ input.form-control:focus{
   box-shadow: 0 0 6px var(--color-acento);
 }
 
-input.form-control:not(:placeholder-shown){
+input.form-control:not(:placeholder-shown) {
   background-color: var(--color-tarjetas);
-  color:var(--color-texto-principal)
+  color: var(--color-texto-principal)
 }
 
 input.form-control:-webkit-autofill {
@@ -133,30 +138,88 @@ input.form-control:-webkit-autofill {
 
 /*Botones */
 
-button.btn-primary{
-    background-color: var(--color-primario);
-    border: none;
-    color: var(--color-texto-principal);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+button.btn-primary {
+  background-color: var(--color-primario);
+  border: none;
+  color: var(--color-texto-principal);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 button.btn-primary:hover,
-button.btn-primary:focus{
-  background-color:  #1E40AF;
+button.btn-primary:focus {
+  background-color: #1E40AF;
 }
 
-button.btn-primary:active{
-  background-color: #1E40AF ;
+button.btn-primary:active {
+  background-color: #1E40AF;
 }
 
-button.btn-outline-secondary{
+button.btn-outline-secondary {
   border: 2px solid var(--color-borde);
   color: var(--color-texto-secundario);
 }
 
+/*Toggle button*/
+
+.switch-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* espacio entre switch y texto */
+  font-family: 'Inter', sans-serif;
+  justify-content: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  margin: 0 auto;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--color-rojo); /* rojo (OFF) */
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px; width: 18px;
+  left: 2px; bottom: 2px;
+  background-color: var(--color-fondo-primario);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+/* Estado ON */
+input:checked + .slider {
+  background-color: var(--color-verde); /* verde (ON) */
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* Texto dinámico */
+.estado-label{
+  font-size: .85rem;
+}
+
+
 /*foooter*/
-footer{
+footer {
   color: var(--color-texto-principal);
 }
 
@@ -164,28 +227,68 @@ footer{
 
 
 
-nav{
+nav {
   background-color: var(--color-fondo-secundario);
   border: 1px solid var(--color-borde);
   height: 10vh;
 }
 
-.nav-link{
+.nav-link {
   color: var(--color-texto-secundario);
 }
 
 .nav-link:hover,
-.nav-lin:focus{
+.nav-lin:focus {
   color: var(--color-texto-principal);
 }
 
-.nav-link:active{
+.nav-link:active {
   color: var(--color-texto-principal);
 }
-.nav-link.active{
-  color: var(--color-texto-principal)!important;
+
+.nav-link.active {
+  color: var(--color-texto-principal) !important;
 }
 
-svg text{
-  color: #EF4444;
+
+/*Tablas*/
+.table-bordered td,
+.table-bordered th {
+  color: var(--color-texto-principal);
+  background-color: var(--color-tarjetas);
+border-color: var(--color-borde);
+  border-left: none;
+  border-right: none;
+  font-weight: 300;
 }
+.table-bordered {
+  border: 1px solid var(--color-borde) !important;
+  border-radius: 5px !important;
+  overflow: hidden; /* fuerza que las esquinas se vean redondeadas */
+}
+
+
+.table-bordered thead th {
+  background-color: var(--color-primario);
+}
+
+/* Paginacion*/
+
+nav.pagination{
+  background-color: transparent;
+  border: none;
+}
+
+.pagination .page-link {
+  background-color: var(--color-tarjetas); /* tu color */
+  border: none; /* opcional */
+  color: var(--color-texto-secundario); /* texto */
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--color-borde); /* color activo */
+  color:var(--color-texto-principal); /* texto en activo */
+}
+
+
+

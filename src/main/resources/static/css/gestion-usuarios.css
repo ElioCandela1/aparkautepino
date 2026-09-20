@@ -1,0 +1,36 @@
+.buscador i {
+    color: #F8FAFC;
+}
+
+.btn-nuevo-usuario{
+    background-color:#22C55E;
+    font-size: .85rem;
+    border: none;
+    padding: .62rem 1.2rem .62rem 1.2rem;
+    color:#0B1120 ;
+    font-weight:600 ;
+}
+
+.btn-nuevo-usuario:hover,
+.btn-nuevo-usuario:focus{
+  background-color:  #16A34A;
+  color:#0B1120 ;
+}
+
+.btn-nuevo-usuario:active{
+  background-color: #15803D !important ;
+  color:#0B1120 !important ;
+}
+
+.table-bordered td,
+.table-bordered th {
+}
+
+.td-acciones {
+  width: 200px;   /* ancho fijo */
+  white-space: nowrap; /* evita que el contenido se rompa en varias líneas */
+}
+
+.btn-editar{
+    color: #F8FAFC !important;
+}
