@@ -1,0 +1,80 @@
+<header th:fragment="navbar(paginaActual)">
+    <nav class="navbar mb-1 navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/images/logo.png}" alt="Logo de la empresa">
+            </a>
+            <h2 class="fs-6">Aparkautepino</h2>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav  mb-2 mb-lg-0 flex-grow-1 justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/inicio'} ? ' active'"
+                            th:href="@{/inicio}">
+                            Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/usuarios'} ? ' active'"
+                            th:href="@{/usuarios}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/vehiculos'} ? ' active'"
+                            th:href="@{/vehiculos}">
+                            Vehiculos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/espacios'} ? ' active'"
+                            th:href="@{/espacios}">
+                            Espacios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/historial'} ? ' active'"
+                            th:href="@{/historial}">
+                            Historial
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- SVG círculo con inicial -->
+                <div class="ms-auto d-flex align-items-center">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="14" fill="#2563EB" />
+                        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="16"
+                            fill="#F8FAFC" th:text="${#authentication.principal != null and #authentication.principal.username != null ? 
+                                #strings.substring(#authentication.principal.username.toUpperCase(), 0, 1) : '?'}">
+                        </text>
+                    </svg>
+                    <!-- Botón logout con inicial (visible en pantallas grandes) -->
+                    <button class="btn btn-sm btn-outline-secondary  ms-2 me-4 d-none d-lg-block">
+                        Cerrar sesión
+                    </button>
+                </div>
+
+
+                <!-- Botón logout con inicial (visible en pantallas pequeñas, al final del menú) -->
+                <div class="d-lg-none">
+                    <svg width="30" height="30">
+                        <circle cx="15" cy="15" r="14" fill="#0d6efd" />
+                        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="16"
+                            fill="white" th:text="${#authentication.principal != null and #authentication.principal.username != null ? 
+                                #strings.substring(#authentication.principal.username.toUpperCase(), 0, 1) : '?'}">
+                        </text>
+                    </svg>
+                    <button class="btn btn-outline-light mt-3  w-100">
+                        Cerrar sesión
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+</header>
