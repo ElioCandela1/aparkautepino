@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebMvc
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -58,7 +57,7 @@ public class SecurityConfig {
 
                 // Logout
                 .logout(logout -> logout
-                        .logoutUrl("logout")
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll());
         return http.build();
