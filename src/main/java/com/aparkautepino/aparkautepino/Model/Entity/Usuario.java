@@ -35,6 +35,10 @@ public class Usuario {
     @Column(name = "nombre_usuario", nullable = false)
     private String username;
 
+    @NotBlank (message = "Debe ingresar una contraseña")
+    @Column (nullable = false)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Se debe ingresar un rol")
     @Column(name = "rol", nullable = false)
@@ -62,6 +66,7 @@ public class Usuario {
         this.rol = builder.rol;
         this.activo = builder.activo;
         this.username = builder.username;
+        this.password = builder.password;
         this.documentoIdentidad = builder.documentoIdentidad;
         this.tipoDocumentoIdentidad = builder.tipoDocumentoIdentidad;
     }
@@ -72,17 +77,19 @@ public class Usuario {
         private String primerApellido;
         private String segundoApellido;
         private String username;
+        private String password;
         private Rol rol;
         private Boolean activo;
         private String documentoIdentidad;
         private String tipoDocumentoIdentidad;
 
         public Builder(int id, String nombre, String primerApellido, String username, Rol rol, Boolean activo,
-                String documentoIdentidad, String tipoDocumentoIdentidad) {
+                String documentoIdentidad, String tipoDocumentoIdentidad, String password) {
             this.id = id;
             this.nombre = nombre;
             this.primerApellido = primerApellido;
             this.username = username;
+            this.password = password;
             this.rol = rol;
             this.activo = activo;
             this.documentoIdentidad = documentoIdentidad;
@@ -106,6 +113,11 @@ public class Usuario {
 
         public Builder username(String username) {
             this.username = username;
+            return this;
+        }
+
+        public Builder password(String password){
+            this.password = password;
             return this;
         }
 
@@ -174,6 +186,14 @@ public class Usuario {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Rol getRol() {
