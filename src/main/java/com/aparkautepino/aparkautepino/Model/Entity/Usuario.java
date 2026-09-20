@@ -83,17 +83,8 @@ public class Usuario {
         private String documentoIdentidad;
         private String tipoDocumentoIdentidad;
 
-        public Builder(int id, String nombre, String primerApellido, String username, Rol rol, Boolean activo,
-                String documentoIdentidad, String tipoDocumentoIdentidad, String password) {
-            this.id = id;
-            this.nombre = nombre;
-            this.primerApellido = primerApellido;
-            this.username = username;
-            this.password = password;
-            this.rol = rol;
-            this.activo = activo;
-            this.documentoIdentidad = documentoIdentidad;
-            this.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
+        
+        public Builder() {
         }
 
         public Builder nombre(String nombre) {
