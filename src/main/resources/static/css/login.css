@@ -1,0 +1,14 @@
+body{
+    display: flex;
+    align-items: center;
+}
+
+@keyframes neonGlow {
+    0% {box-shadow:0 0 3px #06B6D4, 0 0 6px #06B6D4;}
+    50% {box-shadow:0 0 10px #06B6D4, 0 0 20px #06B6D4;}
+    100% {box-shadow:0 0 3px #06B6D4, 0 0 6px #06B6D4;}
+}
+
+.logo{
+    animation: neonGlow 2s ease-in-out infinite;
+}

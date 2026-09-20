@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/**/*.css", "/**/*.js",
                                 "/**/*.png", "/**/*.jpg")
                         .permitAll()
-                        .requestMatchers("/inicio").hasAnyRole("ADMIN", "SEGURIDAD", "USUARIO")
+                        .requestMatchers("/inicio").hasAnyRole("ADMIN", "SEGURIDAD")
                         .requestMatchers("/").hasAnyRole("ADMIN")
                         .requestMatchers("/").hasAnyRole("ADMIN", "SEGURIDAD")
                         .anyRequest().authenticated())

@@ -1,0 +1,155 @@
+/* Reset css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilos */
+
+/*variables de colores*/
+
+:root {
+  --color-primario: #2563EB;
+  --color-fondo-primario: #0B1120;
+  --color-fondo-secundario: #111827;
+  --color-tarjetas: #172033;
+  --color-acento: #06B6D4;
+  --color-verde: #22C55E;
+  --color-rojo: #EF4444;
+  --color-advertencia: #F59E0B;
+  --color-texto-principal: #F8FAFC;
+  --color-texto-secundario: #94A3B8;
+  --color-borde: #26344D;
+}
+
+body{
+    background-color: var(--color-fondo-primario);
+    font-family: 'Inter', sans-serif;
+}
+
+.card{
+  background-color: var(--color-tarjetas);
+}
+
+h1, h2, h3, h4, h5, h6{
+  color: var(--color-texto-principal);
+}
+
+p{
+  color: var(--color-texto-secundario);
+}
+
+label {
+  color: var(--color-texto-principal);
+}
+
+/* Inputs*/
+
+input.form-control{
+  background-color: var(--color-tarjetas);
+  color: var(--color-texto-principal);
+  border: 1px solid var(--color-borde)
+}
+
+input.form-control::placeholder{
+  color: var(--color-texto-secundario);
+}
+
+input.form-control:focus{
+  background-color: var(--color-tarjetas);
+  color: var(--color-texto-principal);
+  outline: none;
+  border-color: var(--color-acento);
+  box-shadow: 0 0 6px var(--color-acento);
+}
+
+input.form-control:not(:placeholder-shown){
+  background-color: var(--color-tarjetas);
+  color:var(--color-texto-principal)
+}
+
+input.form-control:-webkit-autofill {
+  background-color: var(--color-tarjetas) !important;
+  color: var(--color-texto-principal) !important;
+  -webkit-text-fill-color: var(--color-texto-principal) !important;
+  box-shadow: 0 0 0px 1000px var(--color-tarjetas) inset !important;
+}
+
+/*Botones */
+
+button.btn-primary{
+    background-color: var(--color-primario);
+    border: none;
+    color: var(--color-texto-principal);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+button.btn-primary:hover,
+button.btn-primary:focus{
+  background-color:  #1E40AF;
+}
+
+button.btn-primary:active{
+  background-color: #1E40AF ;
+}
+
+footer{
+  color: var(--color-texto-principal);
+}
