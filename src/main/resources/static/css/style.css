@@ -247,8 +247,6 @@ footer {
 
 /*nav*/
 
-
-
 nav {
   background-color: var(--color-fondo-secundario);
   border: 1px solid var(--color-borde);
@@ -312,5 +310,11 @@ nav.pagination{
   color:var(--color-texto-principal); /* texto en activo */
 }
 
+
+/*Buscador*/
+
+.buscador i{
+  color: var(--color-texto-principal);
+}
 
 
