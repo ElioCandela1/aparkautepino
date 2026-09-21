@@ -18,7 +18,6 @@
 <body>
 
     <script>
-
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('.switch-container').forEach(container => {
                 const checkbox = container.querySelector('input[type="checkbox"]');
@@ -26,11 +25,11 @@
 
                 function actualizarEstado() {
                     if (checkbox.checked) {
-                        texto.textContent = "Activar";
+                        texto.textContent = "Desactivar";
 
 
                     } else {
-                        texto.textContent = "Desactivar";
+                        texto.textContent = "Activar";
                     }
                 }
 
@@ -38,7 +37,6 @@
                 checkbox.addEventListener('change', actualizarEstado);
             });
         });
-
     </script>
 
     <div th:replace="fragmentos/nav :: navbar('/gestion-usuarios')"></div>
@@ -58,7 +56,7 @@
             </div>
 
             <div class="col-3 d-flex align-items-center justify-content-end">
-                <a class="btn btn-nuevo-usuario btn-primary" href="/nuevo-usuario" role="button"><i
+                <a class="btn btn-nuevo-usuario btn-primary" href="/crearUsuario" role="button"><i
                         class="fa-solid fa-plus"></i>Nuevo Usuario</a>
             </div>
         </div>

@@ -13,6 +13,10 @@ public class UsuarioController {
     public String login() {
         return "login";
     }
-    
 
+    @GetMapping("/crearUsuario")
+    public String crearUsuario() {
+        return "crear-usuario";
+    }
+    
 }
