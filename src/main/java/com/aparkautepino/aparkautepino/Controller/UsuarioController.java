@@ -18,5 +18,11 @@ public class UsuarioController {
     public String crearUsuario() {
         return "crear-usuario";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "login";
+    }
+    
     
 }

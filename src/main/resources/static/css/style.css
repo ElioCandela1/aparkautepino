@@ -176,7 +176,8 @@ button.btn-primary:active {
   background-color: #1E40AF;
 }
 
-button.btn-outline-secondary {
+button.btn-outline-secondary,
+ a.btn-outline-secondary{
   border: 2px solid var(--color-borde);
   color: var(--color-texto-secundario);
 }
