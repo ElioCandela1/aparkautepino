@@ -42,8 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/**/*.css", "/**/*.js",
                                 "/**/*.png", "/**/*.jpg")
                         .permitAll()
-                        .requestMatchers("/inicio").hasAnyRole("ADMIN", "SEGURIDAD")
-                        .requestMatchers("/gestion-usuarios", "/crearUsuario", "/gestion-vehiculos", "/crear-vehiculos").hasAnyRole("ADMIN")
+                        .requestMatchers("/inicio, /espacios").hasAnyRole("ADMIN", "SEGURIDAD")
+                        .requestMatchers("/gestion-usuarios, /historial", "/crearUsuario", "/gestion-vehiculos", "/crear-vehiculos").hasAnyRole("ADMIN")
                         .requestMatchers("/").hasAnyRole("ADMIN", "SEGURIDAD")
                         .anyRequest().authenticated())
 

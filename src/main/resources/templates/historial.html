@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/historial.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+
+    <title>Historial de Movimientos</title>
+</head>
+
+<body>
+
+    <div th:replace="/fragmentos/nav :: navbar('/historial')"></div>
+
+    <main class="container">
+
+        <div class="row mt-4">
+            <div class="col-5">
+                <h1 class="fw-bold fs-5">Historial de Ingresos y Salidas</h1>
+                <p>Listado general y archivo de los movimientos de estacionamiento</p>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+
+            <div class="card-body">
+
+                <form th:action="@{/filtrar}" method="post">
+
+                    <div class="row align-items-center">
+
+                        <div class="col-3 buscador ">
+                            <div class="position-relative">
+                                <input type="text" class="form-control ps-5 rounded-pill" placeholder="Buscar...">
+                                <i
+                                    class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 "></i>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-2 d-flex align-items-center me-5 ">
+                            <label for="fechaInicio">Desde</label>
+                            <div class="position-relative">
+                                <input type="date" class="form-control ms-1" id="fechaInicio" name="fechaInicio">
+                                <i class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-2 d-flex align-items-center me-3">
+                            <label for="fechaFin">Hasta</label>
+                            <div class="position-relative">
+                                <input type="date" class="form-control ms-1" id="fechaFin" name="fechaFin">
+                                <i class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-1">
+                            <button type="submit" class="btn btn-secondary">Filtrar</button>
+                        </div>
+
+
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover table-active table-bordered border-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Placa</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Propietario</th>
+                            <th scope="col">Estado</th>
+                            <th class="th-acciones" scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td class="td-acciones">
+                                <button type="button"
+                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
+                                <div th:replace="fragmentos/toggle-button :: switch"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td class="td-acciones">
+                                <button type="button"
+                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
+                                <div class="switch-container">
+                                    <label class="switch">
+                                        <input type="checkbox" id="estado">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>John</td>
+                            <td>Doe</td>
+                            <td>@social</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td class="td-acciones">
+                                <button type="button"
+                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
+                                <div class="switch-container">
+                                    <label class="switch">
+                                        <input type="checkbox" id="estado">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+                <nav class="pagination d-flex justify-content-center" aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

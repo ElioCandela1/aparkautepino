@@ -1,0 +1,8 @@
+#fechaFin + i,
+.position-relative i.fa-calendar-days {
+    color:#F8FAFC; /* tu color deseado */
+}
+
+.fa-calendar-days{
+    pointer-events: none;
+}

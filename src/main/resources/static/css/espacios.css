@@ -1,0 +1,67 @@
+.etiqueta-disponible{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    min-height: 90px;
+    width: 125px;
+    text-align: center;
+    background-color: #22C55E;
+    border-radius: 5%;
+    
+}
+.etiqueta-disponible p,
+.etiqueta-disponible h4{
+    margin: 0;
+    
+}
+
+.etiqueta-disponible p{
+    color: #F8FAFC;
+}
+
+.leyenda, main{
+    background-color:#111827;
+    border-radius: 1%;
+}
+
+/*Leyenda*/
+
+.automovil i{
+    color: #2563EB;
+}
+
+.moto i{
+    color: #06B6D4;
+}
+
+.bicicleta i{
+    color: #F59E0B;
+}
+
+.scooter i{
+    color: #EF4444;
+}
+
+/* Boton crear nuevo espacio*/
+
+.btn-nuevo-usuario{
+    background-color:#22C55E;
+    font-size: .85rem;
+    border: none;
+    padding: .62rem 1.2rem .62rem 1.2rem;
+    color:#0B1120 ;
+    font-weight:600 ;
+}
+
+.btn-nuevo-usuario:hover,
+.btn-nuevo-usuario:focus{
+  background-color:  #16A34A;
+  color:#0B1120 ;
+}
+
+.btn-nuevo-usuario:active{
+  background-color: #15803D !important ;
+  color:#0B1120 !important ;
+}
