@@ -1,8 +1,6 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
-public enum Rol {
-
-    ADMIN,
-    SEGURIDAD
-
+public enum TipoAbonado {
+    ESTUDIANTE,
+    DOCENTE
 }

@@ -1,83 +1,34 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-@Entity 
-@Table(name="espacios")
-public class Espacio {
+@Entity
+@Table(
+    name = "espacio",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_espacio_numero", columnNames = "numero")
+    }
+)
+@Builder
+public class Espacio extends AuditableEntity {
 
-@Id 
-@GeneratedValue (strategy = GenerationType.IDENTITY)
-private int id; 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-@Column (name = "nombre", nullable = false)
-@NotBlank (message = "El espacio de estacionamiento debe tener un nombre identificador")
-private String nombre;
+    @NotBlank
+    @Size(max = 20)
+    @Column(nullable = false, length = 20)
+    private String numero;
 
-@Enumerated (EnumType.STRING)
-@Column (nullable = false)
-@NotBlank (message = "El espacio de estacionamiento debe tener un estado asignado")
-private EstadoEspacio estado; 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_permitido", nullable = false, length = 20)
+    private TipoVehiculo tipoPermitido;
 
-@Enumerated (EnumType.STRING)
-@Column (name = "tipo-permitido", nullable = true)
-private TipoVehiculo tipoPermitido;
-
-public Espacio() {
-}
-
-public void ocupar(){
-    this.estado = EstadoEspacio.OCUPADO;
-}
-
-public void liberar(){
-    this.estado = EstadoEspacio.DISPONIBLE;
-}
-
-public boolean admite(TipoVehiculo tipo){
-    return (tipo == tipoPermitido) ? true: false;
-}
-
-public int getId() {
-    return id;
-}
-
-public void setId(int id) {
-    this.id = id;
-}
-
-public String getNombre() {
-    return nombre;
-}
-
-public void setNombre(String nombre) {
-    this.nombre = nombre;
-}
-
-public EstadoEspacio getEstado() {
-    return estado;
-}
-
-public void setEstado(EstadoEspacio estado) {
-    this.estado = estado;
-}
-
-public TipoVehiculo getTipoPermitido() {
-    return tipoPermitido;
-}
-
-public void setTipoPermitido(TipoVehiculo tipoPermitido) {
-    this.tipoPermitido = tipoPermitido;
-}
-
-// getters y setters
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoEspacio estado;
 }

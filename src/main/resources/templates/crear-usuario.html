@@ -26,23 +26,23 @@
                 <p>Complete los datos del nuevo usuario para dar acceso</p>
             </div>
         </div>
-        
+
         <div class="row justify-content-center">
             <div class="col-md-7 ">
                 <div class="card shadow px-4 py-3">
                     <div class="card-body ">
-                        <form th:action="@{/guardarUsuario}" th:object="${usuario}" method="post">
+                        <form th:action="@{/guardarUsuario}" th:object="${usuarioForm}" method="post">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label for="nombre" class="form-label">Nombres</label>
-                                    <input type="text" class="form-control" th:field="*{nombre}" required
+                                    <label for="nombres" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" th:field="*{nombres}" required
                                         placeholder="ej. Juan Manuel">
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label for="primerApellido" class="form-label">Primer Apellido</label>
-                                    <input type="text" class="form-control" th:field="*{primerApellido}"
-                                        required placeholder="ej. Perez">
+                                    <input type="text" class="form-control" th:field="*{primerApellido}" required
+                                        placeholder="ej. Perez">
                                 </div>
                             </div>
 
@@ -55,12 +55,13 @@
 
                                 <div class="col-md-6 mb-3">
                                     <div class="input-group">
-                                        <select class="form-select" th:field="*{tipoDocumentoIdentidad}" required>
-                                            <option value="dni">DNI</option>
-                                            <option value="ce">CE</option>
+                                        <!-- Ahora es un select de TipoDocumento real (por id) -->
+                                        <select class="form-select" th:field="*{idTipoDocumento}" required>
+                                            <option th:each="td : ${tiposDocumento}" th:value="${td.id}"
+                                                th:text="${td.codigo}">DNI</option>
                                         </select>
-                                        <input type="text" class="form-control"
-                                            aria-label="Text input with dropdown button" th:field="*{documentoIdentidad}">
+                                        <input type="text" class="form-control" aria-label="Número de documento"
+                                            th:field="*{numeroDocumento}" placeholder="N° de documento">
                                     </div>
                                 </div>
                             </div>
@@ -68,13 +69,28 @@
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="username" class="form-label">Nombre de Usuario</label>
-                                    <input type="text" class="form-control" th:field="*{username}" 
-                                        placeholder="ej.U23315788">
+                                    <input type="text" class="form-control" th:field="*{username}" required
+                                        placeholder="ej. U23315788">
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label for="password" class="form-label">Contraseña</label>
                                     <input type="password" class="form-control" th:field="*{password}" required>
+                                </div>
+                            </div>
+
+                            <!-- Opcionales: correo y teléfono de Persona -->
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="correo" class="form-label">Correo</label>
+                                    <input type="email" class="form-control" th:field="*{correo}"
+                                        placeholder="ej. juan@correo.com">
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" th:field="*{telefono}"
+                                        placeholder="ej. 999888777">
                                 </div>
                             </div>
 
@@ -88,20 +104,18 @@
                                     </select>
                                 </div>
 
-                                 <div class="col-md-3"></div>
+                                <div class="col-md-3"></div>
 
-                                <div class="mb-3  col-md-3 form-check">
+                                <div class="mb-3 col-md-3 form-check">
                                     <div th:replace="fragmentos/toggle-button :: switch"></div>
                                 </div>
                             </div>
 
                             <div class="mb-3 mt-5 d-flex justify-content-end">
-                                <a href="/gestion-usuarios" class="btn btn-outline-secondary btn-cancelar me-2"
-                                    type="reset">Cancelar</a>
+                                <a href="/gestion-usuarios"
+                                    class="btn btn-outline-secondary btn-cancelar me-2">Cancelar</a>
                                 <button class="btn btn-primary btn-guardar" type="submit">Guardar</button>
                             </div>
-
-
                         </form>
                     </div>
 

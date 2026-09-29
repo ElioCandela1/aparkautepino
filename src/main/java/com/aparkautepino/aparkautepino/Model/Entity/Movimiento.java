@@ -1,74 +1,46 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
-import java.time.Duration;
+import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
 @Entity
-@Table(name = "movimientos")
-public class Movimiento {
+@Table(name = "movimiento")
+@Builder
+public class Movimiento extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "fecha-ingreso", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_vehiculo", nullable = false)
+    private Vehiculo vehiculo;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_espacio", nullable = false)
+    private Espacio espacio;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_abonado")
+    private Abonado abonado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_visitante")
+    private Visitante visitante;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_acceso", nullable = false, length = 20)
+    private TipoAcceso tipoAcceso;
+
+    @Column(name = "fecha_ingreso", nullable = false)
     private LocalDateTime fechaIngreso;
 
-    @Column(name = "fecha-salida", nullable = true)
+    @Column(name = "fecha_salida")
     private LocalDateTime fechaSalida;
 
-    @Column(nullable = false)
-    private boolean estado;
-
-    public Duration duracion() {
-        return Duration.between(this.fechaIngreso, this.fechaSalida);
-    }
-
-    public Movimiento() {
-    }
-
-    public Movimiento(LocalDateTime fechaIngreso, boolean estado) {
-        this.fechaIngreso = fechaIngreso;
-        this.estado = estado;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(LocalDateTime fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
-    }
-
-    public LocalDateTime getFechaSalida() {
-        return fechaSalida;
-    }
-
-    public void setFechaSalida(LocalDateTime fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoMovimiento estado;
 }

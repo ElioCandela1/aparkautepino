@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.aparkautepino.aparkautepino.Model.Repository.UsuarioRepository;
-import com.aparkautepino.aparkautepino.Model.Entity.Usuario;
+import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
+import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -25,9 +24,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioSistemaRepository usuarioRepository;
 
-    public SecurityConfig(UsuarioRepository usuarioRepository) {
+    public SecurityConfig(UsuarioSistemaRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -67,7 +66,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userdetailsService(){
         return username -> {
-            Usuario usuario = usuarioRepository.findByUsername(username)
+            UsuarioSistema usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(()-> new UsernameNotFoundException("Usuario no encontrado"));
 
         return new CustomUserDetails(usuario);
@@ -77,9 +76,9 @@ public class SecurityConfig {
     // 👤 Adaptador de tu entidad User → Spring Security
     public static class CustomUserDetails implements UserDetails {
 
-        private final Usuario usuario;
+        private final UsuarioSistema usuario;
 
-        public CustomUserDetails(Usuario usuario) {
+        public CustomUserDetails(UsuarioSistema usuario) {
             this.usuario = usuario;
         }
 
@@ -89,7 +88,7 @@ public class SecurityConfig {
                     new SimpleGrantedAuthority("ROLE_" + usuario.getRol()));
         }
 
-        public Usuario getUsuario() {
+        public UsuarioSistema getUsuario() {
             return this.usuario;
         }
 

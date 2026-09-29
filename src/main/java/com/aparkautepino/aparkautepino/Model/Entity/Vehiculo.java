@@ -1,105 +1,56 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity 
-@Table 
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Vehiculo {
+@Entity
+@Table(
+    name = "vehiculo",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_vehiculo_placa", columnNames = "placa")
+    }
+)
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Vehiculo extends AuditableEntity {
 
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
-    
-    @Column(nullable = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_persona", nullable = false)
+    private Persona propietario;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private TipoVehiculo tipo;
+
+    @Size(max = 15)
+    @Column(length = 15)
+    private String placa;
+
+    @Size(max = 50)
+    @Column(length = 50)
     private String marca;
-    
-    @Column(nullable = true)
+
+    @Size(max = 50)
+    @Column(length = 50)
     private String modelo;
-    
-    @Column(nullable = false)
+
+    @Size(max = 30)
+    @Column(length = 30)
     private String color;
 
-    @Column(name = "estado_vehiculo", nullable = false)
-    private boolean activo;
-
-    @Enumerated (EnumType.STRING)
-    @Column (name = "tipo_vehiculo",nullable = false)
-    private TipoVehiculo tipoVehiculo;
-
-    public Vehiculo() {
-    }
-
-    
-    public Vehiculo(String color,  TipoVehiculo tipoVehiculo) {
-        this.color = color;
-        this.activo = true;
-        this.tipoVehiculo = tipoVehiculo;
-    }
-
-
-    public boolean requierePlaca(){
-        return this.tipoVehiculo == TipoVehiculo.AUTOMOVIL || this.tipoVehiculo == TipoVehiculo.MOTO;
-    }
-
-    //Getters y Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public TipoVehiculo getTipoVehiculo() {
-        return tipoVehiculo;
-    }
-
-    public void setTipoVehiculo(TipoVehiculo tipoVehiculo) {
-        this.tipoVehiculo = tipoVehiculo;
-    }
-
-    
-
+    @Column(nullable = false)
+    private Boolean activo = true;
 }
