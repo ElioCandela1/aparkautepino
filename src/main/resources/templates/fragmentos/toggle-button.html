@@ -1,27 +1,6 @@
 <div class="switch-container" th:fragment="switch">
-        <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll('.switch-container').forEach(container => {
-                const checkbox = container.querySelector('input[type="checkbox"]');
-                const texto = container.querySelector('.estado-label');
-
-                function actualizarEstado() {
-                    if (checkbox.checked) {
-                        texto.textContent = "Desactivar";
-
-
-                    } else {
-                        texto.textContent = "Activar";
-                    }
-                }
-
-                actualizarEstado();
-                checkbox.addEventListener('change', actualizarEstado);
-            });
-        });
-    </script>
     <label class="switch">
-        <input type="checkbox" id="estado" name="estado">
+        <input type="checkbox" id="estado" name="estado" th:field="*{activo}">
         <span class="slider"></span>
     </label>
     <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>

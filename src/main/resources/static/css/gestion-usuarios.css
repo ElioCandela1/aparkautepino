@@ -1,6 +1,4 @@
-.buscador i {
-    color: #F8FAFC;
-}
+
 
 .btn-nuevo-usuario{
     background-color:#22C55E;
@@ -20,10 +18,6 @@
 .btn-nuevo-usuario:active{
   background-color: #15803D !important ;
   color:#0B1120 !important ;
-}
-
-.table-bordered td,
-.table-bordered th {
 }
 
 .td-acciones {

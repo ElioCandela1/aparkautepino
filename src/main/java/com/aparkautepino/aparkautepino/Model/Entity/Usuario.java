@@ -203,11 +203,11 @@ public class Usuario {
         this.activo = activo;
     }
 
-    public String getDocumentoIndetidad() {
+    public String getDocumentoIdentidad() {
         return documentoIdentidad;
     }
 
-    public void setDocumentoIndetidad(String documentoIndetidad) {
+    public void setDocumentoIdentidad(String documentoIndetidad) {
         this.documentoIdentidad = documentoIndetidad;
     }
 
