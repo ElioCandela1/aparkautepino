@@ -87,4 +87,40 @@ public String crearUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDto 
         return "login";
     }
 
+     @GetMapping("/reset-password")
+    public String mostrarFormulario(@RequestParam("token") String token, Model model) {
+
+        if (!usuarioService.tokenValido(token)) {
+            model.addAttribute("error", "El enlace es inválido o ha expirado.");
+            return "reset-password-error";  // vista de error
+        }
+
+        model.addAttribute("token", token);
+        return "reset-password";  // formulario
+    }
+
+    @PostMapping("/reset-password")
+    public String cambiarPassword(@RequestParam("token") String token,
+                                  @RequestParam("password") String password,
+                                  @RequestParam("confirmPassword") String confirmPassword,
+                                  RedirectAttributes redirectAttributes) {
+
+        if (!password.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Las contraseñas no coinciden.");
+            return "redirect:/reset-password?token=" + token;
+        }
+
+        try {
+            usuarioService.resetearPasswordConToken(token, password);
+            redirectAttributes.addFlashAttribute("mensaje",
+                    "Contraseña actualizada. Ya puedes iniciar sesión.");
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/reset-password?token=" + token;
+        }
+    }
+     
+
 }

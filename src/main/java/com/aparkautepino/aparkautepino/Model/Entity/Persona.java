@@ -41,7 +41,7 @@ public class Persona extends AuditableEntity {
     @Column(nullable = false, length = 100)
     private String primerApellido;
 
-    @NotBlank
+    
     @Size(max = 100)
     @Column(nullable = true, length = 100)
     private String segundoApellido;

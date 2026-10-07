@@ -39,7 +39,7 @@ public class SecurityConfig {
                 // Autorizacion de rutas
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/**/*.css", "/**/*.js",
-                                "/**/*.png", "/**/*.jpg")
+                                "/**/*.png", "/**/*.jpg, ", "/reset-password", "/reset-password-error")
                         .permitAll()
                         .requestMatchers("/inicio, /espacios").hasAnyRole("ADMIN", "SEGURIDAD")
                         .requestMatchers("/gestion-usuarios, /historial", "/crearUsuario", "/gestion-vehiculos", "/crear-vehiculos").hasAnyRole("ADMIN")
@@ -109,7 +109,7 @@ public class SecurityConfig {
 
         @Override
         public boolean isAccountNonLocked() {
-            return true;
+            return !usuario.getBloqueado();
         }
 
         @Override
@@ -119,7 +119,7 @@ public class SecurityConfig {
 
         @Override
         public boolean isEnabled() {
-            return true;
+            return usuario.getActivo();
         }
     }
 

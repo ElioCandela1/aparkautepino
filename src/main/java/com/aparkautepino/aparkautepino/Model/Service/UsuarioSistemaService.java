@@ -1,9 +1,8 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import com.aparkautepino.aparkautepino.Model.Repository.PersonaRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
 
-import jakarta.validation.Valid;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioSistemaService {
@@ -24,15 +23,18 @@ public class UsuarioSistemaService {
     private final PersonaRepository personaRepository;
     private final TipoDocumentoRepository tipoDocumentoRepository;
     private final PasswordEncoder passwordEncoder;
+     private final EmailService emailService;
 
     public UsuarioSistemaService(UsuarioSistemaRepository usuarioRepository,
                                  PersonaRepository personaRepository,
                                  TipoDocumentoRepository tipoDocumentoRepository,
-                                 PasswordEncoder passwordEncoder) {
+                                 PasswordEncoder passwordEncoder,
+                                EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
         this.personaRepository = personaRepository;
         this.tipoDocumentoRepository = tipoDocumentoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public void crearUsuario(UsuarioFormDto form) {
@@ -62,4 +64,62 @@ public class UsuarioSistemaService {
 
         usuarioRepository.save(usuario);
     }
+
+    @Transactional
+    public void registrarIntentoFallido(String username) {
+        UsuarioSistema usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (usuario.getBloqueado()) {
+            return; // Ya está bloqueado
+        }
+
+        int intentos = usuario.getIntentosFallidos() + 1;
+        usuario.setIntentosFallidos(intentos);
+
+        if (intentos >= 3) {
+            usuario.setBloqueado(true);
+            String token = UUID.randomUUID().toString();
+            usuario.setTokenRecuperacion(token);
+            usuario.setFechaExpiracionToken(LocalDateTime.now().plusHours(1)); // 1 hora de validez
+            emailService.enviarCorreoDesbloqueo(usuario.getPersona().getCorreo(), token);
+        }
+
+        usuarioRepository.save(usuario);
+    }
+
+    public void resetearIntentos(String username) {
+        usuarioRepository.findByUsername(username).ifPresent(u -> {
+            u.setIntentosFallidos(0);
+            usuarioRepository.save(u);
+        });
+    }
+
+    public boolean tokenValido(String token) {
+    return usuarioRepository.findByTokenRecuperacion(token)
+            .map(u -> u.getFechaExpiracionToken() != null
+                   && u.getFechaExpiracionToken().isAfter(LocalDateTime.now()))
+            .orElse(false);
+}
+
+@Transactional
+public void resetearPasswordConToken(String token, String nuevaPassword) {
+
+    UsuarioSistema usuario = usuarioRepository.findByTokenRecuperacion(token)
+            .orElseThrow(() -> new RuntimeException("Token inválido"));
+
+    if (usuario.getFechaExpiracionToken() == null
+            || usuario.getFechaExpiracionToken().isBefore(LocalDateTime.now())) {
+        throw new RuntimeException("El enlace ha expirado");
+    }
+
+    // Actualizar contraseña y desbloquear la cuenta
+    usuario.setPassword(passwordEncoder.encode(nuevaPassword));
+    usuario.setBloqueado(false);
+    usuario.setIntentosFallidos(0);
+    usuario.setTokenRecuperacion(null);
+    usuario.setFechaExpiracionToken(null);
+
+    usuarioRepository.save(usuario);
+}
 }

@@ -1,5 +1,7 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,12 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "usuario_sistema",
-    uniqueConstraints = {
+@Table(name = "usuario_sistema", uniqueConstraints = {
         @UniqueConstraint(name = "uk_usuario_username", columnNames = "username")
-    }
-)
+})
 
 @Getter
 @Setter
@@ -29,11 +28,7 @@ public class UsuarioSistema extends AuditableEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-        name = "id_persona",
-        nullable = false,
-        unique = true
-    )
+    @JoinColumn(name = "id_persona", nullable = false, unique = true)
     private Persona persona;
 
     @NotBlank
@@ -52,4 +47,17 @@ public class UsuarioSistema extends AuditableEntity {
 
     @Column(nullable = false)
     private Boolean activo = true;
+
+    @Column(nullable = false)
+    private Integer intentosFallidos = 0;
+
+    @Column(nullable = false)
+    private Boolean bloqueado = false;
+
+    // Campo para el token de recuperación
+    @Column(length = 100)
+    private String tokenRecuperacion;
+
+    @Column
+    private LocalDateTime fechaExpiracionToken;
 }
