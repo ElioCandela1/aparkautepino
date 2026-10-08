@@ -1,8 +1,7 @@
 package com.aparkautepino.aparkautepino.Controller;
 
-import java.lang.ProcessBuilder.Redirect;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aparkautepino.aparkautepino.Model.Dto.UsuarioFormDto;
-import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
 import com.aparkautepino.aparkautepino.Model.Service.UsuarioSistemaService;
@@ -20,7 +18,6 @@ import com.aparkautepino.aparkautepino.Model.Service.UsuarioSistemaService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UsuarioController {

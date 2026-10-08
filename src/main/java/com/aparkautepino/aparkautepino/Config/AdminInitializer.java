@@ -4,14 +4,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.aparkautepino.aparkautepino.Model.Entity.Persona;
-import com.aparkautepino.aparkautepino.Model.Entity.Rol;
-import com.aparkautepino.aparkautepino.Model.Entity.TipoDocumento;
-import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
-import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
-import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
-
 @Configuration
 public class AdminInitializer {
     
