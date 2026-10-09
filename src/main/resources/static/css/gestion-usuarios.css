@@ -28,3 +28,7 @@
 .btn-editar{
     color: #F8FAFC !important;
 }
+
+.modal-solicitudes .modal-content{
+width: 100vw;
+}
