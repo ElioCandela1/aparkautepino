@@ -21,47 +21,35 @@ public class UsuarioSistemaService {
 
     private final UsuarioSistemaRepository usuarioRepository;
     private final PersonaRepository personaRepository;
-    private final TipoDocumentoRepository tipoDocumentoRepository;
+    private final PersonaService personaService;
     private final PasswordEncoder passwordEncoder;
-     private final EmailService emailService;
+    private final EmailService emailService;
 
     public UsuarioSistemaService(UsuarioSistemaRepository usuarioRepository,
-                                 PersonaRepository personaRepository,
-                                 TipoDocumentoRepository tipoDocumentoRepository,
-                                 PasswordEncoder passwordEncoder,
-                                EmailService emailService) {
+            PersonaRepository personaRepository,
+            PasswordEncoder passwordEncoder,
+            EmailService emailService,
+            PersonaService personaService) {
         this.usuarioRepository = usuarioRepository;
         this.personaRepository = personaRepository;
-        this.tipoDocumentoRepository = tipoDocumentoRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.personaService = personaService;
     }
 
+    
+    @Transactional 
     public void crearUsuario(UsuarioFormDto form) {
-
-        TipoDocumento tipo = tipoDocumentoRepository.findById(form.getIdTipoDocumento())
-                .orElseThrow(() -> new IllegalArgumentException("Tipo de documento inválido"));
-
-        // 1. Persona
-        Persona persona = new Persona();
-        persona.setNombres(form.getNombres());
-        persona.setPrimerApellido(form.getPrimerApellido());
-        persona.setSegundoApellido(form.getSegundoApellido());
-        persona.setTipoDocumento(tipo);
-        persona.setNumeroDocumento(form.getNumeroDocumento());
-        persona.setCorreo(form.getCorreo());
-        persona.setTelefono(form.getTelefono());
-        persona.setActivo(true);
-        personaRepository.save(persona);   // ← CLAVE: guardar la Persona
-
-        // 2. Usuario
+        
+        Persona persona = personaService.crearPersona(form);
         UsuarioSistema usuario = new UsuarioSistema();
-        usuario.setPersona(persona);       // ← CLAVE: asignar la Persona
+        usuario.setPersona(persona); // ← CLAVE: asignar la Persona
         usuario.setUsername(form.getUsername());
         usuario.setPassword(passwordEncoder.encode(form.getPassword()));
         usuario.setRol(form.getRol());
         usuario.setActivo(form.getActivo() != null ? form.getActivo() : true);
 
+        personaService.guardarPersona(persona);
         usuarioRepository.save(usuario);
     }
 
@@ -96,30 +84,30 @@ public class UsuarioSistemaService {
     }
 
     public boolean tokenValido(String token) {
-    return usuarioRepository.findByTokenRecuperacion(token)
-            .map(u -> u.getFechaExpiracionToken() != null
-                   && u.getFechaExpiracionToken().isAfter(LocalDateTime.now()))
-            .orElse(false);
-}
-
-@Transactional
-public void resetearPasswordConToken(String token, String nuevaPassword) {
-
-    UsuarioSistema usuario = usuarioRepository.findByTokenRecuperacion(token)
-            .orElseThrow(() -> new RuntimeException("Token inválido"));
-
-    if (usuario.getFechaExpiracionToken() == null
-            || usuario.getFechaExpiracionToken().isBefore(LocalDateTime.now())) {
-        throw new RuntimeException("El enlace ha expirado");
+        return usuarioRepository.findByTokenRecuperacion(token)
+                .map(u -> u.getFechaExpiracionToken() != null
+                        && u.getFechaExpiracionToken().isAfter(LocalDateTime.now()))
+                .orElse(false);
     }
 
-    // Actualizar contraseña y desbloquear la cuenta
-    usuario.setPassword(passwordEncoder.encode(nuevaPassword));
-    usuario.setBloqueado(false);
-    usuario.setIntentosFallidos(0);
-    usuario.setTokenRecuperacion(null);
-    usuario.setFechaExpiracionToken(null);
+    @Transactional
+    public void resetearPasswordConToken(String token, String nuevaPassword) {
 
-    usuarioRepository.save(usuario);
-}
+        UsuarioSistema usuario = usuarioRepository.findByTokenRecuperacion(token)
+                .orElseThrow(() -> new RuntimeException("Token inválido"));
+
+        if (usuario.getFechaExpiracionToken() == null
+                || usuario.getFechaExpiracionToken().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("El enlace ha expirado");
+        }
+
+        // Actualizar contraseña y desbloquear la cuenta
+        usuario.setPassword(passwordEncoder.encode(nuevaPassword));
+        usuario.setBloqueado(false);
+        usuario.setIntentosFallidos(0);
+        usuario.setTokenRecuperacion(null);
+        usuario.setFechaExpiracionToken(null);
+
+        usuarioRepository.save(usuario);
+    }
 }

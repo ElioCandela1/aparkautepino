@@ -7,17 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter 
-public class UsuarioFormDto {
-  // --- Campos de Persona ---
-    private String nombres;
-    private String primerApellido;
-    private String segundoApellido;
-    private Long idTipoDocumento;      // se elige por id
-    private String numeroDocumento;
-    private String correo;
-    private String telefono;
+public class UsuarioFormDto extends PersonaDto{
 
-    // --- Campos de UsuarioSistema ---
+  // --- Campos de UsuarioSistema ---
     private String username;
     private String password;
     private Rol rol;
