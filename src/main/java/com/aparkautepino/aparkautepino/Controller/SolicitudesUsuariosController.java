@@ -1,17 +1,14 @@
 package com.aparkautepino.aparkautepino.Controller;
 
-import com.aparkautepino.aparkautepino.Model.Service.PersonaService;
 import com.aparkautepino.aparkautepino.Model.Service.SolicitudAbonadoService;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aparkautepino.aparkautepino.Model.Dto.PersonaDto;
 import com.aparkautepino.aparkautepino.Model.Dto.SolicitudesPayloadDTO;
 import com.aparkautepino.aparkautepino.Model.Entity.EstadoSolicitud;
-import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.SolicitudAbonado;
 import com.aparkautepino.aparkautepino.Model.Entity.TipoAbonado;
 import com.aparkautepino.aparkautepino.Model.Entity.TipoVehiculo;
@@ -20,12 +17,12 @@ import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -110,5 +107,4 @@ public class SolicitudesUsuariosController {
             return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
         }
     }
-
 }

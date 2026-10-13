@@ -30,5 +30,6 @@
 }
 
 .modal-solicitudes .modal-content{
-width: 100vw;
+width: 1300px;
+max-width: 80vw; 
 }

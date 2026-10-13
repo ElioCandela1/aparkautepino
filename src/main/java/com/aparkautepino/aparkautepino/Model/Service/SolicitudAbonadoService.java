@@ -5,6 +5,7 @@ import com.aparkautepino.aparkautepino.Model.Repository.SolicitudAbonadoReposito
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,11 @@ public class SolicitudAbonadoService {
     // En un nuevo SolicitudCompletaService
     @Transactional
     public void registrarSolicitudCompleta(PersonaDto personaDto, SolicitudAbonado solicitud) {
-        
+
         Persona persona;
 
         try {
-             persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento());
+            persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento());
         } catch (RuntimeException e) {
             persona = personaService.crearPersona(personaDto);
         }
@@ -50,7 +51,8 @@ public class SolicitudAbonadoService {
     }
 
     @Transactional
-    public void aceptarSolicitud(SolicitudAbonado solicitudAbonado) {
+    public void aceptarSolicitud(int id) {
+        SolicitudAbonado solicitudAbonado = solicitudAbonadoRepository.findById(id).orElseThrow(()-> new RuntimeException("No se encontró solicitud"));
         solicitudAbonado.setEstado(EstadoSolicitud.APROBADA);
         solicitudAbonado.setFechaRespuesta(LocalDateTime.now());
         solicitudAbonadoRepository.save(solicitudAbonado);
@@ -62,18 +64,27 @@ public class SolicitudAbonadoService {
                 .color(solicitudAbonado.getColor())
                 .activo(true)
                 .propietario(solicitudAbonado.getPersona())
+                .activo(true)
                 .build();
         vehiculoService.guardarVehiculo(vehiculo);
 
     }
 
-    public void rechazarSolicitud(SolicitudAbonado solicitudAbonado) {
+    public void rechazarSolicitud(int id, String motivo) {
 
+        SolicitudAbonado solicitudAbonado = solicitudAbonadoRepository.findById(id).orElseThrow(()-> new RuntimeException("No se encontró solicitud"));
         solicitudAbonado.setEstado(EstadoSolicitud.RECHAZADA);
         solicitudAbonado.setFechaRespuesta(LocalDateTime.now());
-        solicitudAbonado.setMotivoRechazo("Agregar motivo");
+        solicitudAbonado.setMotivoRechazo(motivo);
 
         solicitudAbonadoRepository.save(solicitudAbonado);
+    }
+
+    public List<SolicitudAbonado> listarSolicitudesPedientes(){
+        
+        List<SolicitudAbonado> solicitudes =  solicitudAbonadoRepository.findTop50ByEstado(EstadoSolicitud.PENDIENTE);
+        return solicitudes;
+        
     }
 
 }

@@ -1,20 +1,23 @@
 package com.aparkautepino.aparkautepino.Controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aparkautepino.aparkautepino.Model.Entity.SolicitudAbonado;
 import com.aparkautepino.aparkautepino.Model.Service.SolicitudAbonadoService;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
-
 @Controller
-@RequestMapping("/SolicitudIngreso")
 public class SolicitudIngresoController {
 
     private final SolicitudAbonadoService solicitudAbonadoService;
@@ -23,43 +26,46 @@ public class SolicitudIngresoController {
         this.solicitudAbonadoService = solicitudAbonadoService;
     }
 
-    @PostMapping("/aprobar")
+    @ModelAttribute("solicitudes")
+    public List<SolicitudAbonado> cargarSolicitudes() {
+        return solicitudAbonadoService.listarSolicitudesPedientes();
+    }
+
+    @PostMapping("/solicitudes/{id}/aprobar")
     @Transactional
     public String aprobarSolicitud(
-            @Valid @ModelAttribute("solicitudAbonado") SolicitudAbonado solicitudAbonado,
-            BindingResult bindingResult,
+            @PathVariable int id,
             RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            String mensaje = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
-            redirectAttributes.addFlashAttribute("mensaje", mensaje);
-            return "redirect:/gestion-usuarios";
-        }
-
         try {
-            solicitudAbonadoService.aceptarSolicitud(solicitudAbonado);
-            redirectAttributes.addFlashAttribute("abrirModal", true);
+            solicitudAbonadoService.aceptarSolicitud(id);
+            redirectAttributes.addFlashAttribute("abrirModal", "solicitudes");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
         }
 
-        return "redirect:/gestion-usuarios";
+        return "redirect:/solicitudes-usuarios";
     }
 
-    @PostMapping("/desaprobar")
-    public String desaprobarSolicitud(@ModelAttribute("solicitudAbonado") SolicitudAbonado solicitudAbonado,
-            RedirectAttributes redirectAttributes) {
+    @PostMapping("/solicitudes/{id}/rechazar")
+    public String desaprobarSolicitud(@PathVariable int id,
+            RedirectAttributes redirectAttributes,
+             @RequestParam("motivoRechazo") String motivoRechazo) {
 
         try {
-            solicitudAbonadoService.rechazarSolicitud(solicitudAbonado);
-            redirectAttributes.addFlashAttribute("abrirModal", true);
+            solicitudAbonadoService.rechazarSolicitud(id, motivoRechazo);
+            redirectAttributes.addFlashAttribute("abrirModal", "solicitudes");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
         }
-        return "redirect:/gestion-usuarios";
+        return "redirect:/solicitudes-usuarios";
     }
 
+    @GetMapping("/solicitudes-usuarios")
+    public String mostrarSolicitudesUsuarios(Model model) {
+
+        model.addAttribute("abrirModal", "solicitudes");
+        return "gestion-usuarios";
+    }
 }
