@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aparkautepino.aparkautepino.Model.Dto.PersonaDto;
 import com.aparkautepino.aparkautepino.Model.Dto.SolicitudesPayloadDTO;
+import com.aparkautepino.aparkautepino.Model.Entity.EstadoSolicitud;
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.SolicitudAbonado;
 import com.aparkautepino.aparkautepino.Model.Entity.TipoAbonado;
@@ -93,7 +94,9 @@ public class SolicitudesUsuariosController {
             solicitudAbonado.setModelo(modelo);
             solicitudAbonado.setColor(color);
             solicitudAbonado.setFechaSolicitud(fechaSolicitud);
+            solicitudAbonado.setEstado(EstadoSolicitud.PENDIENTE);
             solicitudAbonadoService.registrarSolicitudCompleta(personaDto, solicitudAbonado);
+            System.out.println("Se recibió una solicitud");
 
             return ResponseEntity.ok("Recibido");
         } catch (DateTimeParseException e) {

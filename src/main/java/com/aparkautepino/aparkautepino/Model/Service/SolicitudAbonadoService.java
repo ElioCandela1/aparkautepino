@@ -31,7 +31,15 @@ public class SolicitudAbonadoService {
     // En un nuevo SolicitudCompletaService
     @Transactional
     public void registrarSolicitudCompleta(PersonaDto personaDto, SolicitudAbonado solicitud) {
-        Persona persona = personaService.crearPersona(personaDto);
+        
+        Persona persona;
+
+        try {
+             persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento());
+        } catch (RuntimeException e) {
+            persona = personaService.crearPersona(personaDto);
+        }
+
         solicitud.setPersona(persona);
         personaService.guardarPersona(persona);
         guardarSolicitudAbonado(solicitud);

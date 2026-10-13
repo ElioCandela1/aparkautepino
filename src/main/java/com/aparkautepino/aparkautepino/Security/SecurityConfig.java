@@ -36,13 +36,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/solicitudes-usuarios"))
                 // Autorizacion de rutas
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/**/*.css", "/**/*.js",
-                                "/**/*.png", "/**/*.jpg, ", "/reset-password", "/reset-password-error")
+                                "/**/*.png", "/**/*.jpg", "/reset-password", "/reset-password-error",
+                                "/solicitudes-usuarios")
                         .permitAll()
                         .requestMatchers("/inicio, /espacios").hasAnyRole("ADMIN", "SEGURIDAD")
-                        .requestMatchers("/gestion-usuarios, /historial", "/crearUsuario", "/gestion-vehiculos", "/crear-vehiculos").hasAnyRole("ADMIN")
+                        .requestMatchers("/gestion-usuarios, /historial", "/crearUsuario", "/gestion-vehiculos",
+                                "/crear-vehiculos")
+                        .hasAnyRole("ADMIN")
                         .requestMatchers("/").hasAnyRole("ADMIN", "SEGURIDAD")
                         .anyRequest().authenticated())
 
@@ -58,18 +64,22 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
-                        .permitAll());
+                        .permitAll()
+
+                );
+
         return http.build();
+
     }
 
-    //Usuario desde la DB
+    // Usuario desde la DB
     @Bean
-    public UserDetailsService userdetailsService(){
+    public UserDetailsService userdetailsService() {
         return username -> {
             UsuarioSistema usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("Usuario no encontrado"));
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        return new CustomUserDetails(usuario);
+            return new CustomUserDetails(usuario);
         };
     }
 
@@ -126,7 +136,7 @@ public class SecurityConfig {
     // 🔐 3. Password encoder (OBLIGATORIO)
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12); 
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
