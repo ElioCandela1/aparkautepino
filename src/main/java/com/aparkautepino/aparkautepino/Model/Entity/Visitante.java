@@ -31,5 +31,6 @@ public class Visitante extends AuditableEntity {
     private LocalDateTime fechaRegistro;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    @Builder.Default
+    private Boolean activo=true;
 }

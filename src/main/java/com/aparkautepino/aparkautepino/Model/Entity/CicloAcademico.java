@@ -33,5 +33,6 @@ public class CicloAcademico extends AuditableEntity {
     private LocalDate fechaFin;
 
     @Column(nullable = false)
-    private Boolean activo = false;
+    @Builder.Default
+    private Boolean activo=false;
 }

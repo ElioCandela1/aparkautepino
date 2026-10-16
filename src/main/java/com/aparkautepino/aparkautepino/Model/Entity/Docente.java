@@ -33,5 +33,6 @@ public class Docente extends AuditableEntity {
     private String codigoDocente;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean activo = true;
 }

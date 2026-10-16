@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "vehiculo",
-    uniqueConstraints = {
+@Table(name = "vehiculo", uniqueConstraints = {
         @UniqueConstraint(name = "uk_vehiculo_placa", columnNames = "placa")
-    }
-)
+})
 @Getter
 @Setter
 @Builder
@@ -51,5 +48,6 @@ public class Vehiculo extends AuditableEntity {
     private String color;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean activo = true;
 }

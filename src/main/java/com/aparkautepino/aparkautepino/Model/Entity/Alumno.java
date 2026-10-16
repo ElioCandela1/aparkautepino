@@ -34,5 +34,6 @@ public class Alumno extends AuditableEntity {
     private String codigoAlumno;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean activo = true;
 }

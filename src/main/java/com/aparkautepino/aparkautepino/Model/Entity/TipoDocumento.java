@@ -38,5 +38,6 @@ public class TipoDocumento extends AuditableEntity {
     private String nombre;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    @Builder.Default
+    private Boolean activo=true;
 }

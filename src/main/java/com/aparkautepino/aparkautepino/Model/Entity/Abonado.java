@@ -32,7 +32,8 @@ public class Abonado extends AuditableEntity {
     private TipoAbonado tipo;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    @Builder.Default
+    private Boolean activo=true;
 
     @Column(name = "fecha_aprobacion", nullable = false)
     private LocalDateTime fechaAprobacion;

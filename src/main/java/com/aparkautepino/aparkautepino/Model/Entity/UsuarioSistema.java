@@ -46,13 +46,16 @@ public class UsuarioSistema extends AuditableEntity {
     private Rol rol;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean activo = true;
 
     @Column(nullable = false)
+    @Builder.Default
     private Integer intentosFallidos = 0;
 
     @Column(nullable = false)
-    private Boolean bloqueado = false;
+    @Builder.Default
+    private Boolean bloqueado=false;
 
     // Campo para el token de recuperación
     @Column(length = 100)

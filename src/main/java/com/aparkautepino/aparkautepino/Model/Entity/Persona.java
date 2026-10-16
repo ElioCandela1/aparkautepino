@@ -65,5 +65,6 @@ public class Persona extends AuditableEntity {
     private String telefono;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    @Builder.Default
+    private Boolean activo=true;
 }
