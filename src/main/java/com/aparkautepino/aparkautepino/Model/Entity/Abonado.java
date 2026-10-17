@@ -1,7 +1,11 @@
 package com.aparkautepino.aparkautepino.Model.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +16,11 @@ import java.time.LocalDateTime;
         @UniqueConstraint(name = "uk_abonado_persona", columnNames = "id_persona")
     }
 )
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Abonado extends AuditableEntity {
 
     @Id
