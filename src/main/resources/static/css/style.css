@@ -96,7 +96,7 @@ h6 {
   color: var(--color-texto-principal) !important;
 }
 
-p {
+p, small {
   color: var(--color-texto-secundario);
 }
 
@@ -277,7 +277,7 @@ nav {
 .table-bordered th {
   color: var(--color-texto-principal);
   background-color: var(--color-tarjetas);
-border-color: var(--color-borde);
+  border-color: var(--color-borde);
   border-left: none;
   border-right: none;
   font-weight: 300;

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "visitante")
 @Builder
@@ -26,9 +24,6 @@ public class Visitante extends AuditableEntity {
     @Size(max = 255)
     @Column(name = "motivo_visita", length = 255)
     private String motivoVisita;
-
-    @Column(name = "fecha_registro", nullable = false)
-    private LocalDateTime fechaRegistro;
 
     @Column(nullable = false)
     @Builder.Default

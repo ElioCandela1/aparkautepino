@@ -67,4 +67,9 @@ public class Persona extends AuditableEntity {
     @Column(nullable = false)
     @Builder.Default
     private Boolean activo=true;
+
+    public String getNombreCompleto() {
+    return nombres + " " + primerApellido + " " + segundoApellido;
+}
+
 }

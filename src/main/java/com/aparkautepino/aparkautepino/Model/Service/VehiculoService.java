@@ -23,12 +23,17 @@ public class VehiculoService {
 
     }
 
+    public Vehiculo buscarVehiculo(int id){
+        return vehiculoRepository.getReferenceById(id);
+    }
+
     public Vehiculo buscarPorPlaca(String placa) {
       
         return vehiculoRepository.findByPlaca(placa).orElseThrow(() -> new RuntimeException("No se encontró el vehiculo con placa " + placa));
     }
 
-    public List<Vehiculo> bucarPorPropietario(Persona persona) {
+    public List<Vehiculo> buscarPorPropietario(Persona persona) {
+        
        return vehiculoRepository.findAllByPropietario(persona);
     }
 

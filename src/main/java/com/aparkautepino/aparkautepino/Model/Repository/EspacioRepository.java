@@ -16,5 +16,7 @@ public interface EspacioRepository extends JpaRepository<Espacio, Integer> {
 
     Optional<Espacio> findFirstByCategoriaEspacioAndEstado(CategoriaEspacio categoriaEspacio, EstadoEspacio estadoEspacio);
 
+    List<Espacio> findByCategoriaEspacioAndEstado(CategoriaEspacio categoriaEspacio, EstadoEspacio estadoEspacio);
+
     
 }

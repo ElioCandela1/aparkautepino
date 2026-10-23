@@ -3,13 +3,12 @@ package com.aparkautepino.aparkautepino.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 
-import jakarta.transaction.Transactional;
+import ch.qos.logback.core.model.Model;
+
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class VehiculosController {

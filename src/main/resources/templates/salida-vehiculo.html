@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/ingreso-vehiculo.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+    <script th:src="@{/javascript/utils.js}"></script>
+    <title>Salida de Vehiculos</title>
+</head>
+
+<body>
+    <div th:replace="fragmentos/modales :: modales"></div>
+    <div th:replace="fragmentos/nav :: navbar('/inicio')"></div>
+
+    <main class="container">
+        <h1 class="fw-bold fs-5 mt-3 mb-0">Registrar Salida de Vehiculo</h1>
+        <small>Registre la salida de vehiculos ingresando la placa o dni del usuario</small>
+
+        <div class="row display-flex mt-3">
+
+            <div class="col-md-6">
+                <div class="container-fluid movimiento-form px-4">
+                    <div class="container py-1">
+
+                        <!-- Buscador -->
+                        <form th:action="@{/salidas/buscar-vehiculos}" method="get" class="row mb-3">
+                            <label for="criterio" class="fw-medium">Busqueda por placa o documento de identidad</label>
+                            <div class="buscador">
+                                <div class="position-relative mt-2">
+                                    <input type="text" class="form-control ps-5 rounded-1 bg-transparent"
+                                        placeholder="Buscar por placa o documento de identidad..." id="criterio" name="criterio" autocomplete="off" th:value="${criterio}">
+                                    <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form th:action="@{/salidas/manual}" th:object="${movimiento}" method="post" class="py-4">
+
+                            <div class="row">
+                                <div class="card movimiento-info mb-3 ">
+                                    <div class="card-body">
+
+                                        <div class="row mb-2">
+                                            <p class="fw-bold fs-6">Vehiculo seleccionado</p>
+                                        </div>
+
+                                        <input id="id" type="hidden" th:field="*{id}">
+
+                                        <!-- Campos readonly que se envían en el POST (th:field) -->
+                                        <div class="d-flex justify-content-between">
+                                            <label for="placa">Placa:</label>
+                                            <input class="bg-transparent border-0" type="text" id="placa"
+                                                th:field="*{vehiculo.placa}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="marca">Marca / Modelo:</label>
+                                            <input class="bg-transparent border-0" type="text" id="marca"
+                                                th:field="*{vehiculo.marca}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="propietario">Propietario:</label>
+                                            <input class="bg-transparent border-0" type="text" id="propietario"
+                                                th:field="*{abonado.persona.nombreCompleto}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="tipo">Tipo:</label>
+                                            <input class="bg-transparent border-0" type="text" id="tipo"
+                                                th:field="*{vehiculo.tipo}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="espacio">Espacio Asignado:</label>
+                                            <input class="bg-transparent border-0" type="text" id="tipo"
+                                                th:field="*{espacio.numero}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="fechaIngreso">Fecha y Hora de Ingreso:</label>
+                                            <input class="bg-transparent border-0" type="text" id="tipo"
+                                                th:field="*{fechaIngreso}" disabled>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <label for="fechaSalida">Fecha y Hora de Salida:</label>
+                                            <input class="bg-transparent border-0" type="text" id="tipo"
+                                                th:value="${fechaActual}" disabled>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="row justify-content-end me-5">
+                                <div class="col-2 me-3">
+                                    <a href="/inicio" class="btn-outline-secondary btn">Cancelar</a>
+                                </div>
+                                <div class="col-2 me-3">
+                                    <button type="submit" class="btn btn-registrar-ingreso">Registrar Salida</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="container-fluid movimiento-form px-4">
+                    <div class="container py-1">
+                        <h2 class="fw-medium fs-5 mt-3 border-1">Mensaje de alerta y Validaciones</h2>
+                        <p>El sistema valida automaticamente las condiciones de los vehiculos antes de permitir el ingreso</p>
+
+                        <!-- Solo informativo, sin acordeón -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3 class="fw-medium fs-5">Multiples vehiculos</h3>
+                                <p>En caso el usuario cuente con varios vehiculos registrados debera
+                                    seleccionar el vehiculo que va a ingresar.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h3 class="fw-medium fs-5">Visitantes</h3>
+                                <p>En caso el usuario sea un visitante deberá registrar el motivo de la visita.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+.container .movimiento-form, .fecha-hora-ingreso {
+        background-color:#111827;
+        border-radius: 1%;
+        border: 2px solid #26344D;
+        color: #94A3B8;
+}
+.buscador{
+    padding: 0%;
+}
+
+
+.movimiento-info .row{
+    height: 3vh;
+}
+
+.movimiento-info label{
+    color: #94A3B8;
+}
+
+.fecha-hora-ingreso{
+    height: 5.2vh;
+    background-color:#172033;
+}
+
+.movimiento-form .container{
+    border-color: #26344D !important;
+}
+
+.btn-registrar-ingreso{
+    background-color:#22C55E;
+    font-size: .85rem;
+    border: none;
+    padding: .62rem 1.2rem .62rem 1.2rem;
+    color:#0B1120 ;
+    font-weight:600 ;
+    width: 9.6rem;
+}
+
+.border-bottom{
+    color: #26344D !important;
+}
+
+.movimiento-info input {
+    text-align: end;
+    color: #94A3B8;
+
+}
