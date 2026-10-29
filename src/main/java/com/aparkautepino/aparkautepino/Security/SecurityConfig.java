@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/**/*.css", "/**/*.js",
                                 "/**/*.png", "/**/*.jpg", "/reset-password", "/reset-password-error",
-                                "/solicitudes-usuarios")
+                                "/solicitudes-usuarios", "/listar-solicitudes")
                         .permitAll()
                         .requestMatchers("/inicio, /espacios").hasAnyRole("ADMIN", "SEGURIDAD")
                         .requestMatchers("/gestion-usuarios, /historial", "/crearUsuario", "/gestion-vehiculos",

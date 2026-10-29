@@ -60,6 +60,7 @@ public class SolicitudIngresoController {
         return "redirect:/solicitudes-usuarios";
     }
 
+    
     @GetMapping("/solicitudes-usuarios")
     public String mostrarSolicitudesUsuarios(Model model) {
 

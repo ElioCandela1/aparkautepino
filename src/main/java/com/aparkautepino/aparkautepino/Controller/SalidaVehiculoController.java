@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.aparkautepino.aparkautepino.Model.Entity.CategoriaEspacio;
-import com.aparkautepino.aparkautepino.Model.Entity.Espacio;
-import com.aparkautepino.aparkautepino.Model.Entity.EstadoEspacio;
 import com.aparkautepino.aparkautepino.Model.Entity.Movimiento;
-import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 import com.aparkautepino.aparkautepino.Model.Service.BusquedaService;
 import com.aparkautepino.aparkautepino.Model.Service.MovimientoService;
 import com.aparkautepino.aparkautepino.Model.Service.AsignacionEspacioStrategy.AsignarEspacioService;
@@ -67,7 +63,6 @@ public class SalidaVehiculoController {
 
          ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(movimiento));
-
 
         try {
             movimientoService.registarSalidaVehiculo(movimiento.getId());

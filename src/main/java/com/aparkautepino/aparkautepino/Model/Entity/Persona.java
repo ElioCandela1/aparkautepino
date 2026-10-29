@@ -69,6 +69,18 @@ public class Persona extends AuditableEntity {
     private Boolean activo=true;
 
     public String getNombreCompleto() {
+        if (nombres == null) {
+            nombres = "";
+        }
+
+        if (primerApellido == null) {
+            primerApellido = "";
+        }
+
+        if (segundoApellido == null) {
+            segundoApellido = "";
+        }
+
     return nombres + " " + primerApellido + " " + segundoApellido;
 }
 

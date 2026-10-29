@@ -5,6 +5,7 @@ import com.aparkautepino.aparkautepino.Model.Service.SolicitudAbonadoService;
 import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aparkautepino.aparkautepino.Model.Dto.PersonaDto;
 import com.aparkautepino.aparkautepino.Model.Dto.SolicitudesPayloadDTO;
@@ -23,6 +24,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -106,5 +109,29 @@ public class SolicitudesUsuariosController {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/listar-solicitudes")
+    public String mostrarSolicitudesUsuarios(Model model) {
+
+        solicitudAbonadoService.listarSolicitudesPedientes();
+        
+        return "gestion-usuarios";
+    }
+
+    @PostMapping("/solicitudes/{id}/aprobar2")
+    @Transactional
+    public String aprobarSolicitud(
+            @PathVariable int id,
+            RedirectAttributes redirectAttributes) {
+        try {
+            solicitudAbonadoService.aceptarSolicitud(id);
+            redirectAttributes.addFlashAttribute("abrirModal", "solicitudes");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
+        }
+
+        return "redirect:/solicitudes-usuarios";
     }
 }
