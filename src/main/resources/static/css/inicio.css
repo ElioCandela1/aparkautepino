@@ -7,16 +7,11 @@
     color: #F8FAFC;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
-body{
-    height: 100vh !important;
-}
 
-btn btn-secondary{
-    
+
+
+.ver-detalles{
+
+    text-align: center;
 }

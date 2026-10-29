@@ -1,5 +1,10 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
@@ -31,4 +36,13 @@ public class AbonadoService {
 
     }
 
+    public Page<Abonado> listarAbodanos(int numeroPagina){
+
+        Pageable pageable = PageRequest.of(numeroPagina,
+            10, 
+            Sort.by("id").ascending()
+        );
+
+        return abonadoRepository.findAll(pageable);
+    }
 }

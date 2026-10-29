@@ -53,65 +53,32 @@
                 <table class="table table-hover table-active table-bordered border-primary">
                     <thead>
                         <tr>
+                            <th scope="col">Documento de identidad</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Usuario</th>
                             <th scope="col">Rol</th>
-                            <th scope="col">Estado</th>
+                            <th   scope="col">Estado</th>
                             <th class="th-acciones" scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                        <tr th:each="abonado : ${abonados}">
+                            <td class="col-auto" th:text="${abonado.persona.tipoDocumento.codigo} + ': ' + ${abonado.persona.numeroDocumento}" ></td>
+                            <td th:text="${abonado.persona.nombres} + ' ' + ${abonado.persona.primerApellido}"></td>
+                            <td th:text="'ABONADO'"></td>
+                            <td th:text="${abonado.activo} ? 'Activo': 'Inactivo'"></td>
                             <td class="td-acciones">
                                 <button type="button"
                                     class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
                                 <div class="switch-container">
                                     <label class="switch">
-                                        <input type="checkbox" id="estado">
+                                        <input type="checkbox" id="estado" th:checked="${abonado.activo}">
                                         <span class="slider"></span>
                                     </label>
                                     <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
-                                    <label class="switch">
-                                        <input type="checkbox" id="estado">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>@social</td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
-                                    <label class="switch">
-                                        <input type="checkbox" id="estado">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
-                            </td>
-                        </tr>
+                        
                     </tbody>
 
                 </table>
@@ -119,7 +86,7 @@
                 <nav class="pagination d-flex justify-content-center" aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                            <a class="page-link" href="@{/gestion-usuarios(pagina=${abonados.number - 1})}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -254,7 +221,7 @@
                 modal.show();
             }
 
-            // Nota: el botón ya no necesita listener porque es un <a> que navega
+            
         });;
     </script>
 </body>

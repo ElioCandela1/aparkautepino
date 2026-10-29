@@ -1,10 +1,13 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
-import com.aparkautepino.aparkautepino.Model.Service.EspacioService;
+import com.aparkautepino.aparkautepino.Model.Repository.VehiculoRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
@@ -137,7 +140,7 @@ public class MovimientoService {
 
         Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento);
         Abonado abonado = abonadoService.buscarAbonado(persona);
-        Movimiento movimiento = movimientoRepository.getByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO);
+        Movimiento movimiento = movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO).orElseThrow(() -> new RuntimeException("No se encontró el abonado"));
         Espacio espacio = movimiento.getEspacio();
         espacio.setEstado(EstadoEspacio.DISPONIBLE);
         movimiento.setFechaSalida(LocalDateTime.now());
@@ -162,7 +165,16 @@ public class MovimientoService {
         return movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO).orElseThrow(()-> new RuntimeException("No se encontró movimiento para el abonado: " + abonado.getPersona().getNombreCompleto()));
 
         }
-        public Movimiento buscarMovimientoActivo(Vehiculo vehiculo) {
+    public Movimiento buscarMovimientoActivo(Vehiculo vehiculo) {
         return movimientoRepository.findByVehiculoAndEstado(vehiculo, EstadoMovimiento.ACTIVO).orElseThrow(() -> new RuntimeException("No se encontró movimiento para el vehiculo: " + vehiculo.getId()));
+    }
+
+    public Page<Movimiento> listarMovimientos(int numeroPagina ){
+
+        Pageable pageable = PageRequest.of(numeroPagina, 
+                10,
+            Sort.by("id").ascending());
+
+            return movimientoRepository.findAll(pageable);
     }
 }

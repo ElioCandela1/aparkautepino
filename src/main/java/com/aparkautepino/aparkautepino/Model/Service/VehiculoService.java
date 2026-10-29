@@ -2,6 +2,10 @@ package com.aparkautepino.aparkautepino.Model.Service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
@@ -35,6 +39,15 @@ public class VehiculoService {
     public List<Vehiculo> buscarPorPropietario(Persona persona) {
         
        return vehiculoRepository.findAllByPropietario(persona);
+    }
+
+    public Page<Vehiculo> listarVehiculos(int numeroPagina){
+        Pageable pageable = PageRequest.of(numeroPagina,
+            10, 
+            Sort.by("id").ascending()
+        );
+
+        return vehiculoRepository.findAll(pageable);
     }
 
 }

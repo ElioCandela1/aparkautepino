@@ -45,9 +45,6 @@ public class SolicitudesUsuariosController {
 
     @PostMapping("/solicitudes-usuarios")
     public ResponseEntity<String> recibirSolicitud(@RequestBody SolicitudesPayloadDTO solicitud) {
-        System.out.println("Fila recibida: " + solicitud.getFila());
-        System.out.println("Timestamp: " + solicitud.getTimestamp());
-        System.out.println("Datos: " + solicitud.getDatos());
 
         List<Object> datos = solicitud.getDatos();
 

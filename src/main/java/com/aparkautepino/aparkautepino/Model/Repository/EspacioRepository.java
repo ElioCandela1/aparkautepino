@@ -18,5 +18,9 @@ public interface EspacioRepository extends JpaRepository<Espacio, Integer> {
 
     List<Espacio> findByCategoriaEspacioAndEstado(CategoriaEspacio categoriaEspacio, EstadoEspacio estadoEspacio);
 
-    
+    List<Espacio> findByCategoriaEspacioAndNumeroStartingWithOrderById(CategoriaEspacio categoriaEspacio, String sector);
+
+    int countByCategoriaEspacio(CategoriaEspacio categoriaEspacio);
+
+    int countByCategoriaEspacioAndEstado(CategoriaEspacio categoriaEspacio, EstadoEspacio estadoEspacio);
 }

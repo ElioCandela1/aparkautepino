@@ -27,10 +27,10 @@
                 <p>Mapa visual de ocupación de las plazas de estacionamiento</p>
             </div>
 
-            <div class="col-3 d-flex align-items-center justify-content-end">
+            <!--div class="col-3 d-flex align-items-center justify-content-end">
                 <a class="btn btn-nuevo-usuario btn-primary" href="/crear-vehiculos" role="button"><i
                         class="fa-solid fa-plus"></i> Nuevo Espacio</a>
-            </div>
+            </div-->
 
         </div>
 
@@ -87,56 +87,11 @@
             <h3 class=" fs-6">SECTOR A</h3>
         </div>
 
-        <div class="row mb-3 ms-1">
+        <div class="row mb-3 ms-1" >
 
-            <div class="etiqueta-disponible me-3 mb-3 col-1">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
+            <div class="etiqueta-disponible me-3 mb-3 col-1" th:each="espacioSectorA : ${espaciosSectorA}" th:classappend="${espacioSectorA.estado.name() == 'OCUPADO'} ? ' espacio-ocupado' : ' espacio-libre' ">
+                <h4 th:text="${espacioSectorA.numero}"></h4>
+                <p class="fw-medium" th:text="${espacioSectorA.estado}" ></p>
             </div>
 
         </div>
@@ -147,54 +102,9 @@
 
         <div class="row mb-3 ms-1">
 
-            <div class="etiqueta-disponible me-3 mb-3 col-1">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
-            </div>
-
-            <div class="etiqueta-disponible col-1 me-3">
-                <h4>A1</h4>
-                <p class="fw-medium">Disponible</p>
+            <div class="etiqueta-disponible me-3 mb-3 col-1" th:each="espacioSectorB : ${espaciosSectorB}" th:classappend="${espacioSectorB.estado.name() == 'OCUPADO'} ? ' espacio-ocupado' : ' espacio-libre' ">
+                <h4 th:text="${espacioSectorB.numero}"></h4>
+                <p class="fw-medium" th:text="${espacioSectorB.estado}" ></p>
             </div>
 
         </div>
@@ -215,9 +125,9 @@
                                 <p class="mb-1">Disponibles</p>
                             </div>
                             <div class="col text-end">
-                                <p class="mb-1">150</p>
-                                <p class="mb-1">80</p>
-                                <p class="mb-1">70</p>
+                                <p class="mb-1" th:text="${capacidadTotalMotos}"></p>
+                                <p class="mb-1" th:text="${espaciosOcupadosMotos}"></p>
+                                <p class="mb-1" th:text="${espaciosDisponiblesMotos}"></p>
                             </div>
                         </div>
                     </div>
@@ -241,9 +151,9 @@
                                 <p class="mb-1">Disponibles</p>
                             </div>
                             <div class="col text-end">
-                                <p class="mb-1">150</p>
-                                <p class="mb-1">80</p>
-                                <p class="mb-1">70</p>
+                                <p class="mb-1" th:text="${capacidadTotalVehiculosPequenos}"></p>
+                                <p class="mb-1" th:text="${espaciosOcupadosVehiculosPequenos}"></p>
+                                <p class="mb-1" th:text="${espaciosDisponiblesVehiculosPequenos}"></p>
                             </div>
                         </div>
                     </div>

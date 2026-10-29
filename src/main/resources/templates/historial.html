@@ -91,64 +91,20 @@
                             <th scope="col">Color</th>
                             <th scope="col">Propietario</th>
                             <th scope="col">Estado</th>
-                            <th class="th-acciones" scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <!--div th:replace="fragmentos/toggle-button :: switch"></div-->
-                            </td>
+                        <tr th:each="movimiento : ${movimientos}">
+                            <td th:text="${movimiento.vehiculo.placa} ? ${movimiento.vehiculo.placa} : 'N/A' "></td>
+                            <td th:text="${movimiento.vehiculo.tipo}"></td>
+                            <td th:text="${movimiento.vehiculo.marca}"></td>
+                            <td th:text="${movimiento.vehiculo.modelo}"></td>
+                            <td th:text="${movimiento.vehiculo.color}"></td>
+                            <td th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">@mdo</td>
+                            <td th:text="${movimiento.estado}"></td>
+                            
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
-                                    <label class="switch">
-                                        <input type="checkbox" id="estado">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>@social</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
-                                    <label class="switch">
-                                        <input type="checkbox" id="estado">
-                                        <span class="slider"></span>
-                                    </label>
-                                    <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
-                            </td>
-                        </tr>
+                        
                     </tbody>
 
                 </table>

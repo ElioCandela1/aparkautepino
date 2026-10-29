@@ -11,4 +11,6 @@ public interface AbonadoRepository extends JpaRepository<Abonado, Integer> {
 
     Optional<Abonado> findByPersona(Persona persona);
 
+    
+
 }

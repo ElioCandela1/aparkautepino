@@ -29,25 +29,25 @@
             <div class="col card shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <h6 class="card-subtitle fs-2 fw-bold" th:text="${disponiblesVehiculosPesados}"></h6>
+                    <p class="card-text fs-6" th:text="'Capacidad total: ' + ${capacidadVehiculosPesado}"></p>
                 </div>
             </div>
 
             <div class="col card shadow h-100">
                 <div class="card-body">
-                    <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <h5 class="card-title fs-5 fw-normal"> Espacios Ocupados</h5>
+                    <h6 class="card-subtitle fs-2 fw-bold" th:text="${ocupadosVehiculosPesados}"></h6>
+                    <p class="card-text fs-6"
+                        th:text=" 'Porcentaje de ocupacion ' + ${(capacidadVehiculosPesado * ocupadosVehiculosPesados) / 100}  + '%'">
+                    </p>
                 </div>
             </div>
 
 
-            <div class="col card shadow h-100">
+            <div class="col card shadow h-100 ver-detalles">
                 <div class="card-body">
-                    <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <a href="/espacios" class="card-title fs-3 fw-bold  ">Ver <br> Vehiculos Dentro</a>
                 </div>
             </div>
 
@@ -60,26 +60,26 @@
             <div class="col card shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <h6 class="card-subtitle fs-2 fw-bold" th:text="${disponiblesVehiculosLigeros}"></h6>
+                    <p class="card-text fs-6" th:text="'Capacidad total: ' + ${capacidadVehiculosLigeros}"></p>
                 </div>
             </div>
 
 
             <div class="col card shadow h-100">
                 <div class="card-body">
-                    <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <h5 class="card-title fs-5 fw-normal"> Espacios Ocupados</h5>
+                    <h6 class="card-subtitle fs-2 fw-bold" th:text="${ocupadosVehiculosLigeros}"></h6>
+                    <p class="card-text fs-6"
+                        th:text=" 'Porcentaje de ocupacion ' + ${(capacidadVehiculosPesado * ocupadosVehiculosPesados) / 100} + '%'">
+                    </p>
                 </div>
             </div>
 
 
-            <div class="col card shadow h-100">
+            <div class="col card shadow h-100 ver-detalles">
                 <div class="card-body">
-                    <h5 class="card-title fs-5 fw-normal"> Espacios Disponibles</h5>
-                    <h6 class="card-subtitle fs-2 fw-bold">45</h6>
-                    <p class="card-text fs-6"> Capacidad total: 100</p>
+                    <a href="/espacios" class="card-title fs-3 fw-bold">Ver <br> Vehiculos Dentro</a>
                 </div>
             </div>
 
@@ -98,20 +98,20 @@
 
             <div class="col card shadow h-100 p-3">
                 <h5 class="card-title fs-6 fw-bold mb-3">Registrar Salida</h5>
-                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Ingresar nueva placa</h6>
+                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Procesar Salida</h6>
                 <a href="/salida-vehiculo" class="card-link fs-6 fw-semibold">Abrir modulo</a>
             </div>
 
             <div class="col card shadow h-100 p-3">
-                <h5 class="card-title fs-6 fw-bold mb-3">Registrar Ingreso</h5>
-                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Ingresar nueva placa</h6>
-                <a href="#" class="card-link fs-6 fw-semibold">Abrir modulo</a>
+                <h5 class="card-title fs-6 fw-bold mb-3">Gestion de Usuarios</h5>
+                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Listar y Editar Personal</h6>
+                <a href="/gestion-usuarios" class="card-link fs-6 fw-semibold">Abrir modulo</a>
             </div>
 
             <div class="col card shadow h-100 p-3">
-                <h5 class="card-title fs-6 fw-bold mb-3">Registrar Ingreso</h5>
-                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Ingresar nueva placa</h6>
-                <a href="#" class="card-link fs-6 fw-semibold">Abrir modulo</a>
+                <h5 class="card-title fs-6 fw-bold mb-3">Gestion de Vehiculos</h5>
+                <h6 class="card-subtitle fs-6 fw-lighter fst-italic mb-3">Control de Vehiculos</h6>
+                <a href="/gestion-vehiculos" class="card-link fs-6 fw-semibold">Abrir modulo</a>
             </div>
         </div>
     </div>

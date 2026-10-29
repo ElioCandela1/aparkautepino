@@ -11,6 +11,10 @@
     border-radius: 5%;
     
 }
+
+.espacio-ocupado{
+    background-color: #EF4444 !important;
+}
 .etiqueta-disponible p,
 .etiqueta-disponible h4{
     margin: 0;

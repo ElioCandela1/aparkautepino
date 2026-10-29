@@ -14,7 +14,7 @@ public interface MovimientoRepository extends JpaRepository<Movimiento,Integer> 
 
     List<Movimiento> findByEstadoTrue();
 
-    Movimiento getByAbonadoAndEstado(Abonado abonado, EstadoMovimiento EstadoMovimiento);
+    //Movimiento getByAbonadoAndEstado(Abonado abonado, EstadoMovimiento EstadoMovimiento);
 
    Optional<Movimiento> findByAbonadoAndEstado(Abonado abonado, EstadoMovimiento estadoMovimiento);
 
