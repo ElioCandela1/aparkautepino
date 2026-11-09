@@ -62,7 +62,21 @@ button {
 
 /* Estilos */
 
-/*variables de colores*/
+/*variables de colores
+
+
+--color-primario: #E63946;
+--color-fondo-primario: #FFFFFF;
+--color-fondo-secundario: #F8FAFC;
+--color-tarjetas: #FFFFFF;
+--color-acento: #F47282;
+--color-verde: #16A34A;
+--color-rojo: #DC2626;
+--color-advertencia: #D97706;
+--color-texto-principal: #1E293B;
+--color-texto-secundario: #64748B;
+--color-borde: #E2E8F0;
+*/
 
 :root {
   --color-primario: #2563EB;
