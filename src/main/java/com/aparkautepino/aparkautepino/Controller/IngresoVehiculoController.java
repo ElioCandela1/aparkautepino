@@ -79,6 +79,10 @@ public class IngresoVehiculoController {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
             System.out.println(e.getMessage());
+        } catch (IllegalStateException e) {
+
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", "Error al registrar el ingreso del vehiculo");

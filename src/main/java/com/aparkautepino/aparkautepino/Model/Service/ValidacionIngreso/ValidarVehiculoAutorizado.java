@@ -1,7 +1,10 @@
 package com.aparkautepino.aparkautepino.Model.Service.ValidacionIngreso;
 
+import org.springframework.stereotype.Component;
+
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 
+@Component 
 public class ValidarVehiculoAutorizado implements ValidacionIngreso {
 
     @Override

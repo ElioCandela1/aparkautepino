@@ -63,9 +63,12 @@ public class MovimientoService {
         Abonado abonado = abonadoService.buscarAbonado(vehiculo.getPropietario());
 
         for(ValidacionIngreso validacion : validacionIngresos){
+            System.out.println("Estoy validando" + validacion.toString());
             validacion.validar(vehiculo);
         }
 
+
+        System.out.println("Termine de validar");
         // Asignar espacio
 
         Espacio espacio;
