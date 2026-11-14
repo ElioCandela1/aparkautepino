@@ -1,6 +1,7 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +29,13 @@ public class VehiculoService {
     }
 
     public Vehiculo buscarVehiculo(int id){
-        return vehiculoRepository.getReferenceById(id);
+        return vehiculoRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("No se ha podido encontrar el vehiculo"));
     }
 
     public Vehiculo buscarPorPlaca(String placa) {
       
-        return vehiculoRepository.findByPlaca(placa).orElseThrow(() -> new RuntimeException("No se encontró el vehiculo con placa " + placa));
+        return vehiculoRepository.findByPlaca(placa).orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo con placa " + placa));
     }
 
     public List<Vehiculo> buscarPorPropietario(Persona persona) {

@@ -3,6 +3,7 @@ package com.aparkautepino.aparkautepino.Controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +55,6 @@ public class IngresoVehiculoController {
         return "ingreso-vehiculo";
     }
 
-       
-
     @PostMapping("/ingresos/manual")
     public String ingresarVehiculo(@Valid @ModelAttribute("movimiento") Movimiento movimiento,
             BindingResult bindingResult,
@@ -68,14 +67,22 @@ public class IngresoVehiculoController {
             return "redirect:/ingresos/manual";
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(movimiento));
+        // ObjectMapper mapper = new ObjectMapper();
+        // System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(movimiento));
+
+        int idVehiculo = movimiento.getVehiculo().getId();
+        int idEspacio = movimiento.getEspacio().getId();
 
         try {
-            movimientoService.ingresarVehiculo(movimiento.getVehiculo().getId(), movimiento.getEspacio().getId());
-        } catch (Exception e) {
+            movimientoService.ingresarVehiculo(idVehiculo, idEspacio);
+        } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", "Error al registrar el ingreso del vehiculo");
+            System.out.println(e.getMessage());
         }
 
         return "redirect:/ingreso-vehiculo";

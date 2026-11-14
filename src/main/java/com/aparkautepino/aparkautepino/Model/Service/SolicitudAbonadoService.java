@@ -1,5 +1,6 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
+import com.aparkautepino.aparkautepino.Model.Repository.AbonadoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.SolicitudAbonadoRepository;
 
 import com.aparkautepino.aparkautepino.Model.Service.AbonadoService;
@@ -7,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
 import com.aparkautepino.aparkautepino.Model.Entity.EstadoSolicitud;
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.SolicitudAbonado;
+import com.aparkautepino.aparkautepino.Model.Entity.TipoVehiculo;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 
 @Service
@@ -57,24 +60,53 @@ public class SolicitudAbonadoService {
     @Transactional
     public void aceptarSolicitud(int id) {
         SolicitudAbonado solicitudAbonado = solicitudAbonadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontró solicitud"));
+                .orElseThrow(() -> new NoSuchElementException("No se encontró solicitud"));
+
+        // 1. Idempotencia: no reprocesar si ya está resuelta
+        if (solicitudAbonado.getEstado() != EstadoSolicitud.PENDIENTE) {
+            throw new IllegalStateException(
+                    "La solicitud " + id + " ya fue procesada (estado: " + solicitudAbonado.getEstado() + ")");
+        }
+
+        if (solicitudAbonado.getTipoVehiculo().equals(TipoVehiculo.AUTOMOVIL)
+                || solicitudAbonado.getTipoVehiculo().equals(TipoVehiculo.MOTO)) {
+            try {
+                vehiculoService.buscarPorPlaca(solicitudAbonado.getPlaca());
+                throw new IllegalStateException("Ya existe un vehículo con placa " + solicitudAbonado.getPlaca());
+            } catch (NoSuchElementException e) {
+                // no existe → OK
+            }
+
+        }
+
         solicitudAbonado.setEstado(EstadoSolicitud.APROBADA);
         solicitudAbonado.setFechaRespuesta(LocalDateTime.now());
-        solicitudAbonadoRepository.save(solicitudAbonado);
+        // solicitudAbonadoRepository.save(solicitudAbonado);
 
-        Abonado abonado = Abonado.builder()
-                .persona(solicitudAbonado.getPersona())
-                .tipo(solicitudAbonado.getTipoAbonado())
-                .fechaAprobacion(solicitudAbonado.getFechaRespuesta())
-                .build();
+        Abonado abonado;
+
+        // Si el abonado ya existe se actualiza la información del abonado
+        try {
+            Abonado abonadoExistente = abonadoService.buscarAbonado(solicitudAbonado.getPersona());
+            abonadoExistente.setTipo(solicitudAbonado.getTipoAbonado());
+            abonadoExistente.setFechaAprobacion(solicitudAbonado.getFechaRespuesta());
+            abonado = abonadoExistente;
+        } catch (NoSuchElementException e) {
+            abonado = Abonado.builder()
+                    .persona(solicitudAbonado.getPersona())
+                    .tipo(solicitudAbonado.getTipoAbonado())
+                    .fechaAprobacion(solicitudAbonado.getFechaRespuesta())
+                    .build();
+        }
+
         abonadoService.registarAbonado(abonado);
 
-        Vehiculo vehiculo = Vehiculo.builder().tipo(solicitudAbonado.getTipoVehiculo())
+        Vehiculo vehiculo = Vehiculo.builder()
+                .tipo(solicitudAbonado.getTipoVehiculo())
                 .placa(solicitudAbonado.getPlaca())
                 .marca(solicitudAbonado.getMarca())
                 .modelo(solicitudAbonado.getModelo())
                 .color(solicitudAbonado.getColor())
-                .activo(true)
                 .propietario(solicitudAbonado.getPersona())
                 .activo(true)
                 .build();

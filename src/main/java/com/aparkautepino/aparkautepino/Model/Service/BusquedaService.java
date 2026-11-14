@@ -4,6 +4,7 @@ import com.aparkautepino.aparkautepino.Model.Service.MovimientoService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
@@ -90,7 +91,8 @@ public class BusquedaService {
         if(PLACA.matcher(limpio).matches()){
              
             Vehiculo vehiculo = vehiculoService.buscarPorPlaca(limpio);
-            return movimientoService.buscarMovimientoActivo(vehiculo);
+            return movimientoService.buscarMovimientoActivo(vehiculo).orElseThrow(
+                () -> new NoSuchElementException("No se encontró movimiento para el vehiculo: " + vehiculo.getId()));
         }
 
         return null;

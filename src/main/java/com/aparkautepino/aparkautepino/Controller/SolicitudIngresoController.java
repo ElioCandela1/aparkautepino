@@ -30,7 +30,6 @@ public class SolicitudIngresoController {
     }
 
     @PostMapping("/solicitudes/{id}/aprobar")
-    @Transactional
     public String aprobarSolicitud(
             @PathVariable int id,
             RedirectAttributes redirectAttributes) {
@@ -40,6 +39,7 @@ public class SolicitudIngresoController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
+            System.out.println(e);
         }
 
         return "redirect:/solicitudes-usuarios";

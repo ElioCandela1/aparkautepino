@@ -1,8 +1,9 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
-import com.aparkautepino.aparkautepino.Model.Repository.VehiculoRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import com.aparkautepino.aparkautepino.Model.Entity.TipoAcceso;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 import com.aparkautepino.aparkautepino.Model.Repository.MovimientoRepository;
 import com.aparkautepino.aparkautepino.Model.Service.AsignacionEspacioStrategy.AsignarEspacioService;
+import com.aparkautepino.aparkautepino.Model.Service.ValidacionIngreso.ValidacionIngreso;
 
 import jakarta.transaction.Transactional;
 
@@ -35,60 +37,59 @@ public class MovimientoService {
     private final AbonadoService abonadoService;
     private final AsignarEspacioService asignarEspacioService;
     private final PersonaService personaService;
+    private final List<ValidacionIngreso> validacionIngresos;
 
     public MovimientoService(VehiculoService vehiculoService,
-            MovimientoRepository movimientoRepository, AbonadoService abonadoService,
-            AsignarEspacioService asignarEspacioService, PersonaService personaService, EspacioService espacioService) {
+            MovimientoRepository movimientoRepository,
+            AbonadoService abonadoService,
+            AsignarEspacioService asignarEspacioService, 
+            PersonaService personaService, 
+            EspacioService espacioService,
+            List<ValidacionIngreso> validacionIngresos) {
         this.vehiculoService = vehiculoService;
         this.movimientoRepository = movimientoRepository;
         this.abonadoService = abonadoService;
         this.asignarEspacioService = asignarEspacioService;
         this.personaService = personaService;
         this.espacioService = espacioService;
+        this.validacionIngresos = validacionIngresos;
     }
 
     @Transactional
     public void ingresarVehiculo(int idVehiculo, Integer idEspacio) {
 
-        try {
+        Vehiculo vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
 
-            Vehiculo vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
+        Abonado abonado = abonadoService.buscarAbonado(vehiculo.getPropietario());
 
-            Abonado abonado = abonadoService.buscarAbonado(vehiculo.getPropietario());
-            // Verificar que el vehiculo este registrado y activo
-
-            if (!vehiculo.getActivo()) {
-                throw new IllegalStateException("Vehículo inhabilitado");
-            }
-
-            // Asignar espacio
-
-            Espacio espacio;
-            if (idEspacio == null) {
-                espacio = asignarEspacioService.asignarEspacio(vehiculo.getTipo());
-            }else{
-                espacio = espacioService.buscarEspacio(idEspacio);
-            }
-
-            // Crear y registrar movimiento;
-
-            Movimiento movimiento = crearMovimiento(vehiculo, espacio, abonado);
-
-            movimiento.setEspacio(espacio);
-            espacio.setEstado(EstadoEspacio.OCUPADO);
-            movimientoRepository.save(movimiento);
-
-        } catch (Exception e) {
-            System.out.println(e);
-            throw new RuntimeException("No se pudo registrar el ingreso del vehiculo");
+        for(ValidacionIngreso validacion : validacionIngresos){
+            validacion.validar(vehiculo);
         }
+
+        // Asignar espacio
+
+        Espacio espacio;
+        if (idEspacio == null) {
+            espacio = asignarEspacioService.asignarEspacio(vehiculo.getTipo());
+        } else {
+            espacio = espacioService.buscarEspacio(idEspacio);
+        }
+
+        // Crear y registrar movimiento;
+
+        Movimiento movimiento = crearMovimiento(vehiculo, espacio, abonado);
+
+        movimiento.setEspacio(espacio);
+        espacio.setEstado(EstadoEspacio.OCUPADO);
+        movimientoRepository.save(movimiento);
 
     }
 
     @Transactional
     public void registarSalidaVehiculo(int id) {
 
-        Movimiento movimiento = movimientoRepository.findById(id).orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
+        Movimiento movimiento = movimientoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
         Espacio espacio = movimiento.getEspacio();
         espacio.setEstado(EstadoEspacio.DISPONIBLE);
         movimiento.setEstado(EstadoMovimiento.FINALIZADO);
@@ -140,7 +141,8 @@ public class MovimientoService {
 
         Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento);
         Abonado abonado = abonadoService.buscarAbonado(persona);
-        Movimiento movimiento = movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO).orElseThrow(() -> new RuntimeException("No se encontró el abonado"));
+        Movimiento movimiento = movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO)
+                .orElseThrow(() -> new RuntimeException("No se encontró el abonado"));
         Espacio espacio = movimiento.getEspacio();
         espacio.setEstado(EstadoEspacio.DISPONIBLE);
         movimiento.setFechaSalida(LocalDateTime.now());
@@ -162,19 +164,22 @@ public class MovimientoService {
     }
 
     public Movimiento buscarMovimientoActivo(Abonado abonado) {
-        return movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO).orElseThrow(()-> new RuntimeException("No se encontró movimiento para el abonado: " + abonado.getPersona().getNombreCompleto()));
+        return movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO)
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró movimiento para el abonado: " + abonado.getPersona().getNombreCompleto()));
 
-        }
-    public Movimiento buscarMovimientoActivo(Vehiculo vehiculo) {
-        return movimientoRepository.findByVehiculoAndEstado(vehiculo, EstadoMovimiento.ACTIVO).orElseThrow(() -> new RuntimeException("No se encontró movimiento para el vehiculo: " + vehiculo.getId()));
     }
 
-    public Page<Movimiento> listarMovimientos(int numeroPagina ){
+    public Optional<Movimiento> buscarMovimientoActivo(Vehiculo vehiculo) {
+        return movimientoRepository.findByVehiculoAndEstado(vehiculo, EstadoMovimiento.ACTIVO);
+    }
 
-        Pageable pageable = PageRequest.of(numeroPagina, 
+    public Page<Movimiento> listarMovimientos(int numeroPagina) {
+
+        Pageable pageable = PageRequest.of(numeroPagina,
                 10,
-            Sort.by("id").ascending());
+                Sort.by("id").ascending());
 
-            return movimientoRepository.findAll(pageable);
+        return movimientoRepository.findAll(pageable);
     }
 }
