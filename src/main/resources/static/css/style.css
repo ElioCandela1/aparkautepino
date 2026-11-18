@@ -65,20 +65,6 @@ button {
 /*variables de colores
 
 
---color-primario: #E63946;
---color-fondo-primario: #FFFFFF;
---color-fondo-secundario: #F8FAFC;
---color-tarjetas: #FFFFFF;
---color-acento: #F47282;
---color-verde: #16A34A;
---color-rojo: #DC2626;
---color-advertencia: #D97706;
---color-texto-principal: #1E293B;
---color-texto-secundario: #64748B;
---color-borde: #E2E8F0;
-*/
-
-:root {
   --color-primario: #2563EB;
   --color-fondo-primario: #0B1120;
   --color-fondo-secundario: #111827;
@@ -90,6 +76,24 @@ button {
   --color-texto-principal: #F8FAFC;
   --color-texto-secundario: #94A3B8;
   --color-borde: #26344D;
+
+
+*/
+
+:root {
+
+--color-primario: #E63946;
+--color-fondo-primario: #FFFFFF;
+--color-fondo-secundario: #F8FAFC;
+--color-tarjetas: #FFFFFF;
+--color-acento: #F47282;
+--color-verde: #16A34A;
+--color-rojo: #DC2626;
+--color-advertencia: #D97706;
+--color-texto-principal: #1E293B;
+--color-texto-secundario: #64748B;
+--color-borde: #E2E8F0;
+
 }
 
 body {
@@ -183,11 +187,11 @@ button.btn-primary {
 
 button.btn-primary:hover,
 button.btn-primary:focus {
-  background-color: #1E40AF;
+  background-color: var(--color-acento);
 }
 
 button.btn-primary:active {
-  background-color: #1E40AF;
+  background-color: var(--color-acento);
 }
 
 button.btn-outline-secondary,
@@ -290,7 +294,7 @@ nav {
 .table-bordered td,
 .table-bordered th {
   color: var(--color-texto-principal);
-  background-color: var(--color-tarjetas);
+  background-color: var(--color-fondo-secundario);
   border-color: var(--color-borde);
   border-left: none;
   border-right: none;
@@ -305,6 +309,7 @@ nav {
 
 .table-bordered thead th {
   background-color: var(--color-primario);
+  color: #FFFFFF;
 }
 
 /* Paginacion*/

@@ -1,8 +1,8 @@
 .container .movimiento-form, .fecha-hora-ingreso {
-        background-color:#111827;
+        background-color:#F8FAFC;
         border-radius: 1%;
-        border: 2px solid #26344D;
-        color: #94A3B8;
+        border: 2px solid #E2E8F0;
+        color: #64748B;
 }
 .buscador{
     padding: 0%;
@@ -19,29 +19,29 @@
 
 .fecha-hora-ingreso{
     height: 5.2vh;
-    background-color:#172033;
+    background-color:#F8FAFC;
 }
 
 .movimiento-form .container{
-    border-color: #26344D !important;
+    border-color: #E2E8F0 !important;
 }
 
 .btn-registrar-ingreso{
-    background-color:#22C55E;
+    background-color:#16A34A;
     font-size: .85rem;
     border: none;
     padding: .62rem 1.2rem .62rem 1.2rem;
-    color:#0B1120 ;
+    color:#1E293B ;
     font-weight:600 ;
     width: 9.6rem;
 }
 
 .border-bottom{
-    color: #26344D !important;
+    color: #E2E8F0 !important;
 }
 
 .movimiento-info input {
     text-align: end;
-    color: #94A3B8;
+    color: #64748B;
 
 }

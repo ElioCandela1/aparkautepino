@@ -7,13 +7,13 @@
     min-height: 90px;
     width: 125px;
     text-align: center;
-    background-color: #22C55E;
+    background-color: #16A34A;
     border-radius: 5%;
     
 }
 
 .espacio-ocupado{
-    background-color: #EF4444 !important;
+    background-color: #DC2626 !important;
 }
 .etiqueta-disponible p,
 .etiqueta-disponible h4{
@@ -26,7 +26,7 @@
 }
 
 .leyenda, main{
-    background-color:#111827;
+    background-color:#F8FAFC;
     border-radius: 1%;
 }
 
@@ -51,7 +51,7 @@
 /* Boton crear nuevo espacio*/
 
 .btn-nuevo-usuario{
-    background-color:#22C55E;
+    background-color:#16A34A;
     font-size: .85rem;
     border: none;
     padding: .62rem 1.2rem .62rem 1.2rem;
