@@ -1,17 +1,32 @@
-.row{
-    gap: 20px;
-
-}
-
-.row a{
-    color: #F8FAFC;
+.row a {
+    color: #64748B;
 }
 
 
+@keyframes neonGlow {
+    0% {
+        box-shadow: 0 0 3px #F47282, 0 0 6px #F47282;
+    }
+
+    50% {
+        box-shadow: 0 0 10px #F47282, 0 0 20px #F47282;
+    }
+
+    100% {
+        box-shadow: 0 0 3px #F47282, 0 0 6px #F47282;
+    }
+}
 
 
+.tarjeta-acceso-rapido:hover {
+    animation: neonGlow 2s ease-in-out infinite;
+}
 
-.ver-detalles{
+.ver-detalles {
 
     text-align: center;
+}
+
+a span{
+    color: #F47282;
 }
