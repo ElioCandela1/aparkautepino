@@ -21,9 +21,9 @@ public class ValidarIngresoActivo implements ValidacionIngreso{
 
     @Override
     public void validar(Vehiculo vehiculo) {
+        System.out.println("Validando que no haya ingresos activos");
 
         Movimiento movimiento = movimientoRepository.findByVehiculoAndEstado(vehiculo, EstadoMovimiento.ACTIVO).orElse(null);
-        System.out.println("Movimiento activo encontrado: " + movimiento.getId());
 
         if(movimiento != null){
             throw new IllegalStateException("El vehiculo cuenta con un ingreso activo");

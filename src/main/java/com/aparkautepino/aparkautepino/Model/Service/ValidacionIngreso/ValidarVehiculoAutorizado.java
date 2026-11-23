@@ -9,6 +9,7 @@ public class ValidarVehiculoAutorizado implements ValidacionIngreso {
 
     @Override
     public void validar(Vehiculo vehiculo) {
+        System.out.println("Validando que el vehiculo este autorizado");
        if(!vehiculo.getActivo()){
         throw new IllegalStateException("Vehiculo Inhabilitado");
        }

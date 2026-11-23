@@ -9,6 +9,7 @@ public class ValidarPropietarioActivo implements ValidacionIngreso{
 
     @Override
     public void validar(Vehiculo vehiculo) {
+        System.out.println("Validando que el propietario este activo");
         if(!vehiculo.getPropietario().getActivo()){
             throw new IllegalStateException("El propietario de este vehiculo se encuentra inhabilitado");
         }

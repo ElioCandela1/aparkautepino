@@ -69,11 +69,10 @@ public class IngresoVehiculoController {
 
         // ObjectMapper mapper = new ObjectMapper();
         // System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(movimiento));
-
-        int idVehiculo = movimiento.getVehiculo().getId();
-        int idEspacio = movimiento.getEspacio().getId();
-
+        Integer idVehiculo = movimiento.getVehiculo().getId();
+        Integer idEspacio = movimiento.getEspacio().getId();
         try {
+
             movimientoService.ingresarVehiculo(idVehiculo, idEspacio);
         } catch (NoSuchElementException e) {
             redirectAttributes.addFlashAttribute("tipoModal", "notificacion");

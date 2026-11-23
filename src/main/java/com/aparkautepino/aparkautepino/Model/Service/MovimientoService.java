@@ -56,23 +56,24 @@ public class MovimientoService {
     }
 
     @Transactional
-    public void ingresarVehiculo(int idVehiculo, Integer idEspacio) {
+    public void ingresarVehiculo(Integer idVehiculo, Integer idEspacio) {
 
         Vehiculo vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
 
         Abonado abonado = abonadoService.buscarAbonado(vehiculo.getPropietario());
 
         for(ValidacionIngreso validacion : validacionIngresos){
-            System.out.println("Estoy validando" + validacion.toString());
+            System.out.println("Entre a validar");
             validacion.validar(vehiculo);
         }
 
+        System.out.println("Sali de validar");
 
-        System.out.println("Termine de validar");
         // Asignar espacio
 
         Espacio espacio;
         if (idEspacio == null) {
+            System.out.println("El id del espacio es nulo");
             espacio = asignarEspacioService.asignarEspacio(vehiculo.getTipo());
         } else {
             espacio = espacioService.buscarEspacio(idEspacio);
