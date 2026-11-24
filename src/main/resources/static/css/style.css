@@ -180,7 +180,7 @@ select option:hover{
 button.btn-primary {
   background-color: var(--color-primario);
   border: none;
-  color: var(--color-texto-principal);
+  color: var(--color-fondo-primario);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }

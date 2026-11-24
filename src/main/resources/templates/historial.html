@@ -43,12 +43,13 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="col-2 d-flex align-items-center me-5 ">
                             <label for="fechaInicio">Desde</label>
                             <div class="position-relative">
                                 <input type="date" class="form-control ms-1" id="fechaInicio" name="fechaInicio">
-                                <i class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
+                                <i
+                                    class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
                         </div>
 
@@ -56,7 +57,8 @@
                             <label for="fechaFin">Hasta</label>
                             <div class="position-relative">
                                 <input type="date" class="form-control ms-1" id="fechaFin" name="fechaFin">
-                                <i class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
+                                <i
+                                    class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
                         </div>
 
@@ -100,27 +102,35 @@
                             <td th:text="${movimiento.vehiculo.marca}"></td>
                             <td th:text="${movimiento.vehiculo.modelo}"></td>
                             <td th:text="${movimiento.vehiculo.color}"></td>
-                            <td th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">@mdo</td>
+                            <td
+                                th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">
+                                @mdo</td>
                             <td th:text="${movimiento.estado}"></td>
-                            
+
                         </tr>
-                        
+
                     </tbody>
 
                 </table>
 
-                <nav class="pagination d-flex justify-content-center" aria-label="Page navigation example">
+                <nav class="pagination d-flex justify-content-center" aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                        <li class="page-item" th:classappend="${movimientos.first} ? 'disabled'">
+                            <a class="page-link" th:href="@{/historial(pagina=${movimientos.number - 1})}"
+                                aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, movimientos.totalPages - 1)}"
+                            th:classappend="${i == movimientos.number} ? 'active'">
+                            <a class="page-link" th:href="@{/historial(pagina=${i})}" th:text="${i + 1}"></a>
+                        </li>
+
+                        <!-- Siguiente -->
+                        <li class="page-item" th:classappend="${movimientos.last} ? 'disabled'">
+                            <a class="page-link" th:href="@{/historial(pagina=${movimientos.number + 1})}"
+                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
