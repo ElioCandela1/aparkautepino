@@ -1,16 +1,19 @@
 package com.aparkautepino.aparkautepino.Controller;
 
-
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.aparkautepino.aparkautepino.Model.Dto.UsuarioFormDto;
+import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
+import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
 import com.aparkautepino.aparkautepino.Model.Service.UsuarioSistemaService;
@@ -29,14 +32,11 @@ public class UsuarioController {
     }
 
     private final UsuarioSistemaService usuarioService;
-    private final UsuarioSistemaRepository usuarioRepository;
     private final TipoDocumentoRepository tipoDocumentoRepository;
 
     public UsuarioController(UsuarioSistemaService usuarioService,
-            UsuarioSistemaRepository usuarioRepository,
             TipoDocumentoRepository tipoDocumentoRepository) {
         this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
         this.tipoDocumentoRepository = tipoDocumentoRepository;
     }
 
@@ -52,55 +52,79 @@ public class UsuarioController {
         return "crear-usuario";
     }
 
+    @GetMapping("/actualizar-usuario/{id}")
+    public String formularioEditarAbonado(@PathVariable int id,
+            Model model) {
+        UsuarioFormDto usuarioForm = usuarioService.obtenerFormulario(id);
+        
+        model.addAttribute("usuarioForm", usuarioForm);
+        model.addAttribute("tiposDocumento", tipoDocumentoRepository.findAll());
+        return "crear-usuario";
+    }
+
     @PostMapping("/guardarUsuario")
-public String crearUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDto form,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes,
-                           Model model) {
+    public String crearUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDto form,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
-    if (bindingResult.hasErrors()) {
-        String mensaje = bindingResult.getAllErrors().get(0).getDefaultMessage();
-        redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
-        redirectAttributes.addFlashAttribute("mensaje", mensaje);
-        redirectAttributes.addFlashAttribute("usuarioForm", form);
-        return "redirect:/crearUsuario";
+        if (bindingResult.hasErrors()) {
+            String mensaje = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", mensaje);
+            redirectAttributes.addFlashAttribute("usuarioForm", form);
+            return "redirect:/crearUsuario";
+        }
+
+        try {
+
+            boolean esEdicion = form.getIdUsuario() != null;
+
+            if (esEdicion) {
+                usuarioService.actualizarUsuario(form);
+            } else {
+                usuarioService.crearUsuario(form);
+            }
+
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje",
+                    esEdicion ? "Usuario actualizado con éxito" : "Usuario guardado con éxito");
+            return "redirect:/crearUsuario";
+
+        } catch (NoSuchElementException e) {
+
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
+            return "redirect:/crearUsuario";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
+            redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
+            return "redirect:/crearUsuario";
+        }
     }
-
-    try {
-        usuarioService.crearUsuario(form);
-        redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
-        redirectAttributes.addFlashAttribute("mensaje", "Usuario guardado con éxito");
-        return "redirect:/crearUsuario";
-
-    } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("tipoModal", "notificacion");
-        redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
-        return "redirect:/crearUsuario";
-    }
-}
 
     @GetMapping("/logout")
     public String logout() {
         return "login";
     }
 
-     @GetMapping("/reset-password")
+    @GetMapping("/reset-password")
     public String mostrarFormulario(@RequestParam("token") String token, Model model) {
 
         if (!usuarioService.tokenValido(token)) {
             model.addAttribute("error", "El enlace es inválido o ha expirado.");
-            return "reset-password-error";  // vista de error
+            return "reset-password-error"; // vista de error
         }
 
         model.addAttribute("token", token);
-        return "reset-password";  // formulario
+        return "reset-password"; // formulario
     }
 
     @PostMapping("/reset-password")
     public String cambiarPassword(@RequestParam("token") String token,
-                                  @RequestParam("password") String password,
-                                  @RequestParam("confirmPassword") String confirmPassword,
-                                  RedirectAttributes redirectAttributes) {
+            @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword,
+            RedirectAttributes redirectAttributes) {
 
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Las contraseñas no coinciden.");
@@ -118,6 +142,5 @@ public String crearUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDto 
             return "redirect:/reset-password?token=" + token;
         }
     }
-     
 
 }

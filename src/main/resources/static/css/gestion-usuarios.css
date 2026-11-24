@@ -21,7 +21,7 @@
 }
 
 .td-acciones {
-  width: 200px;   /* ancho fijo */
+  width: 100px;   /* ancho fijo */
   white-space: nowrap; /* evita que el contenido se rompa en varias líneas */
 }
 

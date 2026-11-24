@@ -1,8 +1,13 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,7 @@ import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Service
 public class UsuarioSistemaService {
@@ -37,10 +43,9 @@ public class UsuarioSistemaService {
         this.personaService = personaService;
     }
 
-    
-    @Transactional 
+    @Transactional
     public void crearUsuario(UsuarioFormDto form) {
-        
+
         Persona persona = personaService.crearPersona(form);
         UsuarioSistema usuario = new UsuarioSistema();
         usuario.setPersona(persona); // ← CLAVE: asignar la Persona
@@ -109,5 +114,62 @@ public class UsuarioSistemaService {
         usuario.setFechaExpiracionToken(null);
 
         usuarioRepository.save(usuario);
+    }
+
+    public Page<UsuarioSistema> listarAbodanos(int pagina) {
+
+        Pageable pageable = PageRequest.of(pagina,
+                10,
+                Sort.by("id").ascending());
+
+        return usuarioRepository.findAll(pageable);
+    }
+
+    public UsuarioSistema buscarUsuario(int id) {
+
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el usuario"));
+    }
+
+    @Transactional
+    public void actualizarUsuario(UsuarioFormDto form) {
+
+        UsuarioSistema usuarioPersistido = usuarioRepository.findById(form.getIdUsuario())
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el usuario"));
+
+        Persona persona = personaService.crearPersona(form);
+
+        personaService.editarPersona(persona, form.getIdPersona());
+
+        usuarioPersistido.setActivo(form.getActivo());
+        usuarioPersistido.setRol(form.getRol());
+        usuarioPersistido.setUsername(form.getUsername());
+        if (!form.getPassword().isBlank() && form.getPassword() != null) {
+            usuarioPersistido.setPassword(passwordEncoder.encode(form.getPassword()));
+        }
+
+    }
+
+    public UsuarioFormDto obtenerFormulario(int id) {
+
+        UsuarioSistema usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el usuario"));
+
+        UsuarioFormDto dto = new UsuarioFormDto();
+
+        dto.setActivo(usuario.getActivo());
+        dto.setCorreo(usuario.getPersona().getCorreo());
+        dto.setIdPersona(usuario.getPersona().getId());
+        dto.setIdUsuario(usuario.getId());
+        dto.setIdTipoDocumento(usuario.getPersona().getTipoDocumento().getId());
+        dto.setNombres(usuario.getPersona().getNombres());
+        dto.setNumeroDocumento(usuario.getPersona().getNumeroDocumento());
+        dto.setPrimerApellido(usuario.getPersona().getPrimerApellido());
+        dto.setSegundoApellido(usuario.getPersona().getSegundoApellido());
+        dto.setTelefono(usuario.getPersona().getTelefono());
+        dto.setUsername(usuario.getUsername());
+
+        return dto;
+
     }
 }

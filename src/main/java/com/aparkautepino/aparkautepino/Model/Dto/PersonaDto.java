@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PersonaDto {
 
+    private Integer idPersona;
     private String nombres;
     private String primerApellido;
     private String segundoApellido;

@@ -200,6 +200,11 @@ button.btn-outline-secondary,
   color: var(--color-texto-secundario);
 }
 
+/*Iconos*/
+i{
+  color: var(--color-acento);
+}
+
 /*Toggle button*/
 
 .switch-container {

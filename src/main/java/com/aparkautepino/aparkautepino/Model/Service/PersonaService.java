@@ -1,6 +1,9 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aparkautepino.aparkautepino.Model.Dto.PersonaDto;
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
@@ -45,5 +48,20 @@ public class PersonaService {
     public Persona buscarpersonaPorNumeroDocumento(String numeroDocumento) {
         return personaRepository.findByNumeroDocumento(numeroDocumento).orElseThrow(() -> new RuntimeException("Persona no encontrado"));
         
+    }
+
+        @Transactional
+    public void editarPersona(Persona persona, int id){
+
+        Persona personaPersistida = personaRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No se encontró la persona"));
+    
+        personaPersistida.setActivo(persona.getActivo());
+        personaPersistida.setCorreo(persona.getCorreo());
+        personaPersistida.setNombres(persona.getNombres());
+        personaPersistida.setNumeroDocumento(persona.getNumeroDocumento());
+        personaPersistida.setPrimerApellido(persona.getPrimerApellido());
+        personaPersistida.setSegundoApellido(persona.getSegundoApellido());
+        personaPersistida.setTelefono(persona.getTelefono());
+        personaPersistida.setTipoDocumento(persona.getTipoDocumento());
     }
 }

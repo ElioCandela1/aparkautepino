@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/crear-usuario.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+    <script th:src="@{/javascript/utils.js}"></script>
+    <title>Crear Usuarios</title>
+</head>
+
+<body>
+
+    <div th:replace="fragmentos/modales :: modales"></div>
+    <div th:replace="fragmentos/nav :: navbar('/gestion-abonados')"></div>
+    <main class="container">
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <h1 class="fw-bold fs-5">Editar Abonado</h1>
+                <p>Ingrese los datos para actualizar el abonado</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-7 ">
+                <div class="card shadow px-4 py-3">
+                    <div class="card-body ">
+                        <form th:action="@{/guardar-abonado/{id}(id=${abonado.id})}" th:object="${abonado}" method="post">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <input type="hidden" th:field="*{persona.id}">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="nombres" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" th:field="*{persona.nombres}" required
+                                        placeholder="ej. Juan Manuel">
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="primerApellido" class="form-label">Primer Apellido</label>
+                                    <input type="text" class="form-control" th:field="*{persona.primerApellido}"
+                                        required placeholder="ej. Perez">
+                                </div>
+                            </div>
+
+                            <div class="row d-flex align-items-end">
+                                <div class="mb-3 col-md-6">
+                                    <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+                                    <input type="text" class="form-control" th:field="*{persona.segundoApellido}"
+                                        placeholder="ej. Castro">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <!-- Ahora es un select de TipoDocumento real (por id) -->
+                                        <select class="form-select" th:field="*{persona.TipoDocumento.id}" required>
+                                            <option th:each="td : ${tiposDocumento}" th:value="${td.id}"
+                                                th:text="${td.codigo}">DNI</option>
+                                        </select>
+                                        <input type="text" class="form-control" aria-label="Número de documento"
+                                            th:field="*{persona.numeroDocumento}" placeholder="N° de documento">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Opcionales: correo y teléfono de Persona -->
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="correo" class="form-label">Correo</label>
+                                    <input type="email" class="form-control" th:field="*{persona.correo}"
+                                        placeholder="ej. juan@correo.com">
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" th:field="*{persona.telefono}"
+                                        placeholder="ej. 999888777">
+                                </div>
+                            </div>
+
+                            <div class="row  d-flex align-items-end justify-content-end">
+                                <div class="mb-3 col-md-6 ">
+                                    <label for="rol" class="form-label">Rol del Sistema</label>
+                                    <select class="form-select" th:field="*{tipo}">
+                                        <option value="ESTUDIANTE">Estudiante</option>
+                                        <option value="DOCENTE">Docente</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="switch-container">
+                                        <label class="switch">
+                                            <input type="checkbox" id="estado" th:checked="${abonado.activo}" th:field="*{activo}">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 mt-5 d-flex justify-content-end">
+                                <a href="/gestion-abonados"
+                                    class="btn btn-outline-secondary btn-cancelar me-2">Cancelar</a>
+                                <button class="btn btn-primary btn-guardar" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.switch-container').forEach(container => {
+                const checkbox = container.querySelector('input[type="checkbox"]');
+                const texto = container.querySelector('.estado-label');
+
+                function actualizarEstado() {
+                    if (checkbox.checked) {
+                        texto.textContent = "Desactivar";
+
+
+                    } else {
+                        texto.textContent = "Activar";
+                    }
+                }
+
+                actualizarEstado();
+                checkbox.addEventListener('change', actualizarEstado);
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

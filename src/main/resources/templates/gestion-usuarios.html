@@ -55,51 +55,58 @@
                         <tr>
                             <th scope="col">Documento de identidad</th>
                             <th scope="col">Nombre</th>
+                            <th scope="col">Usuario</th>
                             <th scope="col">Rol</th>
-                            <th   scope="col">Estado</th>
+                            <th scope="col">Estado</th>
                             <th class="th-acciones" scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="abonado : ${abonados}">
-                            <td class="col-auto" th:text="${abonado.persona.tipoDocumento.codigo} + ': ' + ${abonado.persona.numeroDocumento}" ></td>
-                            <td th:text="${abonado.persona.nombres} + ' ' + ${abonado.persona.primerApellido}"></td>
-                            <td th:text="'ABONADO'"></td>
-                            <td th:text="${abonado.activo} ? 'Activo': 'Inactivo'"></td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
+                        <tr th:each="usuario : ${usuarios}">
+                            <td class="col-auto"
+                                th:text="${usuario.persona.tipoDocumento.codigo} + ': ' + ${usuario.persona.numeroDocumento}">
+                            </td>
+                            <td th:text="${usuario.persona.nombres} + ' ' + ${usuario.persona.primerApellido}"></td>
+                            <td th:text="${usuario.username}"></td>
+                            <td th:text="${usuario.rol}"></td>
+                            <td th:text="${usuario.activo} ? 'Activo': 'Inactivo'"></td>
+                            <td class="td-acciones  text-center">
+
+
+                                <a th:href="@{/actualizar-usuario/{id}(id=${usuario.id})}" class="me-2 ">
+                                    <i class="fa-solid fa-pen-to-square fs-6"></i>
+                                </a>
+                                <!--div class="switch-container">
                                     <label class="switch">
-                                        <input type="checkbox" id="estado" th:checked="${abonado.activo}">
+                                        <input type="checkbox" id="estado" th:checked="${usuario.activo}">
                                         <span class="slider"></span>
                                     </label>
                                     <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
+                                </div-->
                             </td>
                         </tr>
-                        
+
                     </tbody>
 
                 </table>
 
-                <<nav class="pagination d-flex justify-content-center" aria-label="Page navigation">
+                <nav class="pagination d-flex justify-content-center" aria-label="Page navigation">
                     <ul class="pagination">
-                        <li class="page-item" th:classappend="${abonados.first} ? 'disabled'">
-                            <a class="page-link" th:href="@{/gestion-usuarios(pagina=${abonados.number - 1})}"
+                        <li class="page-item" th:classappend="${usuarios.first} ? 'disabled'">
+                            <a class="page-link" th:href="@{/gestion-usuarios(pagina=${usuarios.number - 1})}"
                                 aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
 
-                        <li class="page-item" th:each="i : ${#numbers.sequence(0, abonados.totalPages - 1)}"
-                            th:classappend="${i == abonados.number} ? 'active'">
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, usuarios.totalPages - 1)}"
+                            th:classappend="${i == usuarios.number} ? 'active'">
                             <a class="page-link" th:href="@{/gestion-usuarios(pagina=${i})}" th:text="${i + 1}"></a>
                         </li>
 
                         <!-- Siguiente -->
-                        <li class="page-item" th:classappend="${abonados.last} ? 'disabled'">
-                            <a class="page-link" th:href="@{/gestion-usuarios(pagina=${abonados.number + 1})}"
+                        <li class="page-item" th:classappend="${usuarios.last} ? 'disabled'">
+                            <a class="page-link" th:href="@{/gestion-usuarios(pagina=${usuarios.number + 1})}"
                                 aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -150,7 +157,7 @@
                                 <td th:text="${solicitud.tipoVehiculo}"></td>
 
                                 <td th:text="${solicitud.placa}"></td>
-                                
+
                                 <td>
                                     <form th:action="@{/solicitudes/{id}/aprobar(id=${solicitud.id})}" method="post"
                                         style="display:inline">
@@ -165,8 +172,9 @@
                                 <td>
                                     <input type="text" class="form-control form-control-sm"
                                         th:attr="data-id=${solicitud.id}" placeholder="Escriba el motivo de rechazo..."
-                                        th:value="${solicitud.motivoRechazo}" name="motivoRechazo" th:form="'formRechazar-' + ${solicitud.id}" required>
-                                </td>   
+                                        th:value="${solicitud.motivoRechazo}" name="motivoRechazo"
+                                        th:form="'formRechazar-' + ${solicitud.id}" required>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(solicitudes)}">
                                 <td colspan="6" class="text-center">Sin resultados</td>
@@ -227,7 +235,7 @@
                 modal.show();
             }
 
-            
+
         });;
     </script>
 </body>

@@ -25,6 +25,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" th:classappend="${paginaActual == '/gestion-abonados'} ? ' active'"
+                            th:href="@{/gestion-abonados}">
+                            Abonados
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" th:classappend="${paginaActual == '/gestion-vehiculos'} ? ' active'"
                             th:href="@{/gestion-vehiculos}">
                             Vehiculos

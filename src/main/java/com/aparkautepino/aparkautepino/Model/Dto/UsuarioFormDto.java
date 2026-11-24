@@ -10,6 +10,7 @@ import lombok.Setter;
 public class UsuarioFormDto extends PersonaDto{
 
   // --- Campos de UsuarioSistema ---
+    private Integer idUsuario;
     private String username;
     private String password;
     private Rol rol;

@@ -8,29 +8,32 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
+import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 import com.aparkautepino.aparkautepino.Model.Service.AbonadoService;
 import com.aparkautepino.aparkautepino.Model.Service.SolicitudAbonadoService;
+import com.aparkautepino.aparkautepino.Model.Service.UsuarioSistemaService;
 
 @Controller
 public class GestionUsuariosController {
 
-    private final SolicitudAbonadoService solicitudAbonadoService;
-    private final AbonadoService abonadoService;
+    UsuarioSistemaService usuarioSistemaService;
 
-    public GestionUsuariosController(SolicitudAbonadoService solicitudAbonadoService, AbonadoService abonadoService) {
-        this.solicitudAbonadoService = solicitudAbonadoService;
-        this.abonadoService = abonadoService;
+    public GestionUsuariosController(UsuarioSistemaService usuarioSistemaService) {
+        this.usuarioSistemaService = usuarioSistemaService;
     }
+
+
 
     @GetMapping("/gestion-usuarios")
     public String mostrarVista(@RequestParam(defaultValue = "0") int pagina,
             Model model) {
 
-        Page<Abonado> abonados = abonadoService.listarAbodanos(pagina);
+        Page<UsuarioSistema> usuariosSistema = usuarioSistemaService.listarAbodanos(pagina);
 
-        model.addAttribute("abonados", abonados);
+        model.addAttribute("usuarios", usuariosSistema);
 
         return "gestion-usuarios";
     }
+
 
 }
