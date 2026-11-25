@@ -10,6 +10,8 @@
     <link rel="stylesheet" th:href="@{/css/historial.css}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <script th:src="@{/javascript/utils.js}"></script>
 
     <title>Historial de Movimientos</title>
 </head>
@@ -49,8 +51,6 @@
                             <label for="fechaInicio">Desde</label>
                             <div class="position-relative">
                                 <input type="date" class="form-control ms-1" id="fechaInicio" name="desde">
-                                <i
-                                    class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
                         </div>
 
@@ -58,8 +58,6 @@
                             <label for="fechaFin">Hasta</label>
                             <div class="position-relative">
                                 <input type="date" class="form-control ms-1" id="fechaFin" name="hasta">
-                                <i
-                                    class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
                         </div>
 
