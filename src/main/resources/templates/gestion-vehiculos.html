@@ -62,16 +62,17 @@
                             <td th:text="${vehiculo.color}"></td>
                             <td th:text="${vehiculo.propietario.nombres} +' ' + ${vehiculo.propietario.primerApellido}">@mdo</td>
                             <td th:text="${vehiculo.activo ? 'Activo' : 'Inactivo'}"></td>
-                            <td class="td-acciones">
-                                <button type="button"
-                                    class="btn btn-editar btn-outline-secondary btn-sm">Editar</button>
-                                <div class="switch-container">
+                            <td class="td-acciones text-center">
+                                  <a th:href="@{/actualizar-vehiculo/{id}(id=${vehiculo.id})}" class="me-2 ">
+                                    <i class="fa-solid fa-pen-to-square fs-6"></i>
+                                </a>
+                                <!--div class="switch-container">
                                     <label class="switch">
                                         <input type="checkbox" id="estado" th:checked="${vehiculo.activo}">
                                         <span class="slider"></span>
                                     </label>
                                     <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
+                                </div-->
                             </td>
                         </tr>
                         

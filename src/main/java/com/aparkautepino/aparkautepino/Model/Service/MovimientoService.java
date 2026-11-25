@@ -1,5 +1,6 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -105,7 +106,7 @@ public class MovimientoService {
     public void ingresarVehiculo(String numeroDocumento) {
 
         // Verificar que la persona existe y es un abonado
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(numeroDocumento);
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(numeroDocumento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
         Abonado abonado = abonadoService.buscarAbonado(persona);
 
         if (!abonado.getActivo()) {
@@ -143,7 +144,7 @@ public class MovimientoService {
     @Transactional
     public void registarSalidaVehiculo(String documento) {
 
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento);
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
         Abonado abonado = abonadoService.buscarAbonado(persona);
         Movimiento movimiento = movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO)
                 .orElseThrow(() -> new RuntimeException("No se encontró el abonado"));
@@ -186,4 +187,13 @@ public class MovimientoService {
 
         return movimientoRepository.findAll(pageable);
     }
+
+    public Page<Movimiento> buscar(LocalDate desde, LocalDate hasta,
+                               String placa, String dni, Pageable pageable) {
+    return movimientoRepository.findAll(
+            MovimientoSpec.conFiltros(desde, hasta, placa, dni),
+            pageable);
+}
+
+
 }

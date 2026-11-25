@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,7 +127,7 @@ public class PersonaServiceTest {
                 .thenReturn(Optional.of(personaEsperada));
 
         //Act
-        Persona resultado = personaService.buscarpersonaPorNumeroDocumento("12345678");
+        Persona resultado = personaService.buscarpersonaPorNumeroDocumento("12345678").orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
 
         //Assert
         assertNotNull(resultado);

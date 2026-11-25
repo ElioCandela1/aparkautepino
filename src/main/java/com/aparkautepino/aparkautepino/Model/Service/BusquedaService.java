@@ -1,7 +1,5 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
-import com.aparkautepino.aparkautepino.Model.Service.MovimientoService;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,8 +11,6 @@ import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
 import com.aparkautepino.aparkautepino.Model.Entity.Movimiento;
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
-import com.aparkautepino.aparkautepino.Model.Repository.AbonadoRepository;
-
 @Service 
 public class BusquedaService {
 
@@ -39,7 +35,7 @@ public class BusquedaService {
 
     public Abonado bucarporDocumentoIdentidad(String documento){
 
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento);
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
 
         return abonadoService.buscarAbonado(persona);
     }
@@ -61,7 +57,7 @@ public class BusquedaService {
         String limpio = criterio.trim().toUpperCase();
 
         if(DOCIDENTIDAD.matcher(limpio).matches()){
-            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio);
+            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
             return vehiculoService.buscarPorPropietario(persona);
         }
 
@@ -83,7 +79,7 @@ public class BusquedaService {
         String limpio = criterio.trim().toUpperCase();
 
         if(DOCIDENTIDAD.matcher(limpio).matches()){
-            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio);
+            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
 
             return movimientoService.buscarMovimientoActivo(abonadoService.buscarAbonado(persona));
         }

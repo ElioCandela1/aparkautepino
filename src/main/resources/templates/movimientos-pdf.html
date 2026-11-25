@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Reporte de Ingresos</title>
+    <style>
+        /* Define el tamaño de página y márgenes */
+        @page { size: A4; margin: 15mm; }
+        body { font-family: "DejaVu Sans", sans-serif; font-size: 10pt; }
+        .reporte-tabla { width: 100%; border-collapse: collapse; }
+        .reporte-tabla th, .reporte-tabla td { border: 0.2mm solid #ccc; padding: 3mm; }
+        .reporte-tabla th { background-color: #f2f2f2; text-align: left; }
+        .texto-derecha { text-align: right; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Ingresos al Estacionamiento</h1>
+    <p>Fecha de generación: <span th:text="${#dates.format(fechaGeneracion, 'dd/MM/yyyy HH:mm')}"></span></p>
+
+                    <table class="table table-hover table-active table-bordered border-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Placa</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Propietario</th>
+                            <th scope="col">Fecha Ingreso</th>
+                            <th scope="col">Fecha Salida</th>
+                            <th scope="col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="movimiento : ${movimientos}">
+                            <td th:text="${movimiento.vehiculo.placa} ? ${movimiento.vehiculo.placa} : 'N/A' "></td>
+                            <td th:text="${movimiento.vehiculo.tipo}"></td>
+                            <td th:text="${movimiento.vehiculo.marca}"></td>
+                            <td th:text="${movimiento.vehiculo.modelo}"></td>
+                            <td th:text="${movimiento.vehiculo.color}"></td>
+                            <td
+                                th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">
+                                @mdo</td>
+                            <td th:text="${#temporals.format(movimiento.fechaIngreso, 'dd/MM/yyyy - HH:mm')}"></td>
+
+                            <td th:text="${#temporals.format(movimiento.fechaSalida, 'dd/MM/yyyy - HH:mm')}"></td>
+                            <td th:text="${movimiento.estado}"></td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+</body>
+</html>

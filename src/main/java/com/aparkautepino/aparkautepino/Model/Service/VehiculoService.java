@@ -13,13 +13,18 @@ import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
 import com.aparkautepino.aparkautepino.Model.Repository.VehiculoRepository;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
 @Service
 public class VehiculoService {
 
     private final VehiculoRepository vehiculoRepository;
+    private final PersonaService personaService;
 
-    public VehiculoService(VehiculoRepository vehiculoRepository) {
+    public VehiculoService(VehiculoRepository vehiculoRepository, PersonaService personaService) {
         this.vehiculoRepository = vehiculoRepository;
+        this.personaService = personaService;
     }
 
     public void guardarVehiculo(Vehiculo vehiculo) {
@@ -50,6 +55,33 @@ public class VehiculoService {
         );
 
         return vehiculoRepository.findAll(pageable);
+    }
+
+    @Transactional 
+    public void actualizarVehiculo(Vehiculo vehiculo) {
+        
+        Vehiculo vehiculoPersistido = vehiculoRepository.findById(vehiculo.getId())
+            .orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo"));
+
+        Persona propietario = personaService.buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento())
+        .orElseThrow(() -> new NoSuchElementException("No se encontró el propietario"));
+        vehiculoPersistido.setActivo(vehiculo.getActivo());
+        vehiculoPersistido.setColor(vehiculo.getColor());
+        vehiculoPersistido.setMarca(vehiculo.getMarca());
+        vehiculoPersistido.setModelo(vehiculo.getModelo());
+        vehiculoPersistido.setPlaca(vehiculo.getPlaca());
+        vehiculoPersistido.setPropietario(propietario);
+        vehiculoPersistido.setTipo(vehiculo.getTipo());
+    }
+
+    @Transactional
+    public void crearVehiculo(Vehiculo vehiculo) {
+        System.out.println("Encontré el propietario");
+        Persona propietario = personaService.buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento()).orElseThrow(() -> new RuntimeException("No se encontró el propietario"));
+        
+        vehiculo.setPropietario(propietario);
+        vehiculoRepository.save(vehiculo);
+
     }
 
 }

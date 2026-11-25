@@ -31,13 +31,14 @@
 
             <div class="card-body">
 
-                <form th:action="@{/filtrar}" method="post">
+                <form th:action="@{/filtrar}" method="get">
 
                     <div class="row align-items-center">
 
                         <div class="col-3 buscador ">
                             <div class="position-relative">
-                                <input type="text" class="form-control ps-5 rounded-pill" placeholder="Buscar...">
+                                <input type="text" class="form-control ps-5 rounded-pill" placeholder="Buscar..."
+                                    name="dni">
                                 <i
                                     class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 "></i>
                             </div>
@@ -47,7 +48,7 @@
                         <div class="col-2 d-flex align-items-center me-5 ">
                             <label for="fechaInicio">Desde</label>
                             <div class="position-relative">
-                                <input type="date" class="form-control ms-1" id="fechaInicio" name="fechaInicio">
+                                <input type="date" class="form-control ms-1" id="fechaInicio" name="desde">
                                 <i
                                     class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
@@ -56,7 +57,7 @@
                         <div class="col-2 d-flex align-items-center me-3">
                             <label for="fechaFin">Hasta</label>
                             <div class="position-relative">
-                                <input type="date" class="form-control ms-1" id="fechaFin" name="fechaFin">
+                                <input type="date" class="form-control ms-1" id="fechaFin" name="hasta">
                                 <i
                                     class="fa-solid fa-calendar-days position-absolute top-50 end-0 translate-middle-y me-2"></i>
                             </div>
@@ -69,10 +70,14 @@
                             <button type="submit" class="btn btn-secondary">Filtrar</button>
                         </div>
 
+                        <div class="col-3 text-end">
+                            <a th:href="@{/reportes/movimientos/pdf}"><i class="fa-solid fa-file-pdf fs-4"></i></a>
+                        </div>
 
                     </div>
 
                 </form>
+
 
 
 
@@ -92,6 +97,8 @@
                             <th scope="col">Modelo</th>
                             <th scope="col">Color</th>
                             <th scope="col">Propietario</th>
+                            <th scope="col">Fecha Ingreso</th>
+                            <th scope="col">Fecha Salida</th>
                             <th scope="col">Estado</th>
                         </tr>
                     </thead>
@@ -105,6 +112,9 @@
                             <td
                                 th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">
                                 @mdo</td>
+                            <td th:text="${#temporals.format(movimiento.fechaIngreso, 'dd/MM/yyyy - HH:mm')}"></td>
+
+                            <td th:text="${#temporals.format(movimiento.fechaSalida, 'dd/MM/yyyy - HH:mm')}"></td>
                             <td th:text="${movimiento.estado}"></td>
 
                         </tr>
@@ -129,8 +139,9 @@
 
                         <!-- Siguiente -->
                         <li class="page-item" th:classappend="${movimientos.last} ? 'disabled'">
-                            <a class="page-link" th:href="@{/historial(pagina=${movimientos.number + 1})}"
-                                aria-label="Next">
+                            <a class="page-link" th:href="@{/historial(pagina=${movimientos.number + 1},
+                             desde=${desde}, hasta=${hasta},
+                             placa=${placa}, dni=${dni})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

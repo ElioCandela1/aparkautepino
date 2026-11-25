@@ -43,7 +43,8 @@ public class SolicitudAbonadoService {
         Persona persona;
 
         try {
-            persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento());
+            persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento())
+            .orElseThrow(() -> new NoSuchElementException("Persona no encontrada"));
         } catch (RuntimeException e) {
             persona = personaService.crearPersona(personaDto);
         }

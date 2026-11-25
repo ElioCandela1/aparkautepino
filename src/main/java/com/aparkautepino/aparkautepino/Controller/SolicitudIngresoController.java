@@ -65,6 +65,6 @@ public class SolicitudIngresoController {
     public String mostrarSolicitudesUsuarios(Model model) {
 
         model.addAttribute("abrirModal", "solicitudes");
-        return "gestion-usuarios";
+        return "gestion-abonados";
     }
 }
