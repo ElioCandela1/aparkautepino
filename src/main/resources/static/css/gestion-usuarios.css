@@ -1,17 +1,25 @@
 
 
 .btn-nuevo-usuario{
-    background-color:#22C55E;
+    background-color:#16A34A;
     font-size: .85rem;
     border: none;
     padding: .62rem 1.2rem .62rem 1.2rem;
-    color:#0B1120 ;
+    color:#FFFF ;
     font-weight:600 ;
 }
 
+.btn-nuevo-usuario i{
+  color: #FFFF;
+}
 .btn-nuevo-usuario:hover,
 .btn-nuevo-usuario:focus{
-  background-color:  #16A34A;
+  background-color:  #199145;
+  color:#0B1120 ;
+}
+
+.btn-nuevo-usuario:hover i,
+.btn-nuevo-usuario:focus i{
   color:#0B1120 ;
 }
 
