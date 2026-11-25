@@ -26,7 +26,6 @@ import com.aparkautepino.aparkautepino.Model.Service.MovimientoService;
 import com.aparkautepino.aparkautepino.Model.Service.AsignacionEspacioStrategy.AsignarEspacioService;
 
 import jakarta.validation.Valid;
-import tools.jackson.databind.ObjectMapper;
 
 import org.springframework.web.bind.annotation.RequestParam;
 

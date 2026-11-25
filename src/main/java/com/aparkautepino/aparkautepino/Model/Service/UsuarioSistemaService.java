@@ -2,6 +2,7 @@ package com.aparkautepino.aparkautepino.Model.Service;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -131,6 +132,10 @@ public class UsuarioSistemaService {
                 .orElseThrow(() -> new NoSuchElementException("No se encontró el usuario"));
     }
 
+    public Optional<UsuarioSistema> buscarUsuario(Persona persona){
+        return usuarioRepository.findByPersona(persona);
+    }
+
     @Transactional
     public void actualizarUsuario(UsuarioFormDto form) {
 
@@ -172,4 +177,6 @@ public class UsuarioSistemaService {
         return dto;
 
     }
+
+
 }

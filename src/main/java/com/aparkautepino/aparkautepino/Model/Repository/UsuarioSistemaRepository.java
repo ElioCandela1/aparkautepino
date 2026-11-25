@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.aparkautepino.aparkautepino.Model.Entity.Persona;
 import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 
 public interface UsuarioSistemaRepository extends JpaRepository<UsuarioSistema, Integer> {
@@ -16,5 +17,7 @@ public interface UsuarioSistemaRepository extends JpaRepository<UsuarioSistema, 
     Page<UsuarioSistema> findAll(Pageable pageable);
 
     Optional<UsuarioSistema> findByTokenRecuperacion(String token);
+
+    Optional<UsuarioSistema> findByPersona(Persona persona);
 
 }

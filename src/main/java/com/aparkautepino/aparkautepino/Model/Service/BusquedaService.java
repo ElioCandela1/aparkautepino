@@ -1,8 +1,11 @@
 package com.aparkautepino.aparkautepino.Model.Service;
 
+import com.aparkautepino.aparkautepino.Model.Service.MovimientoService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
@@ -10,59 +13,70 @@ import org.springframework.stereotype.Service;
 import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
 import com.aparkautepino.aparkautepino.Model.Entity.Movimiento;
 import com.aparkautepino.aparkautepino.Model.Entity.Persona;
+import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
-@Service 
+
+@Service
 public class BusquedaService {
 
     private final MovimientoService movimientoService;
     private final PersonaService personaService;
     private final AbonadoService abonadoService;
     private final VehiculoService vehiculoService;
+    private final UsuarioSistemaService usuarioSistemaService;
     private static final Pattern PLACA = Pattern.compile("^[A-Z]{3}-?\\d{3,4}$");
     private static final Pattern DOCIDENTIDAD = Pattern.compile("^\\d{8}$");
 
-    
-
     public BusquedaService(PersonaService personaService, AbonadoService abonadoService,
-            VehiculoService vehiculoService,MovimientoService movimientoService) {
+            VehiculoService vehiculoService, MovimientoService movimientoService,
+            UsuarioSistemaService usuarioSistemaService) {
         this.personaService = personaService;
         this.abonadoService = abonadoService;
         this.vehiculoService = vehiculoService;
         this.movimientoService = movimientoService;
+        this.usuarioSistemaService = usuarioSistemaService;
     }
 
+    public Abonado bucarporDocumentoIdentidad(String documento) {
 
-
-    public Abonado bucarporDocumentoIdentidad(String documento){
-
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento)
+                .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
 
         return abonadoService.buscarAbonado(persona);
     }
 
-    public  Vehiculo buscarVehiculoPorPlaca(String placa){
+    public Optional<UsuarioSistema> bucarUsuarioporDocumentoIdentidad(String documento) {
 
-        return  vehiculoService.buscarPorPlaca(placa);
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento)
+                .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+
+        return usuarioSistemaService.buscarUsuario(persona);
     }
 
-    public List<Vehiculo> buscarVehiculoPorPropietario(Persona persona){
+    public Vehiculo buscarVehiculoPorPlaca(String placa) {
+
+        return vehiculoService.buscarPorPlaca(placa);
+    }
+
+    public List<Vehiculo> buscarVehiculoPorPropietario(Persona persona) {
         return vehiculoService.buscarPorPropietario(persona);
     }
 
-    public List<Vehiculo> buscar(String criterio){
+    public List<Vehiculo> buscar(String criterio) {
 
-         if (criterio == null || criterio.isBlank()) {
-        return Collections.emptyList();
-    }
+        if (criterio == null || criterio.isBlank()) {
+            return Collections.emptyList();
+        }
         String limpio = criterio.trim().toUpperCase();
 
-        if(DOCIDENTIDAD.matcher(limpio).matches()){
-            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+        if (DOCIDENTIDAD.matcher(limpio).matches()) {
+            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio)
+                    .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
             return vehiculoService.buscarPorPropietario(persona);
         }
 
-        if(PLACA.matcher(limpio).matches()){
-             
+        if (PLACA.matcher(limpio).matches()) {
+
             Vehiculo vehiculo = vehiculoService.buscarPorPlaca(limpio);
             return List.of(vehiculo);
         }
@@ -70,25 +84,25 @@ public class BusquedaService {
         return Collections.emptyList();
     }
 
-
-
     public Movimiento buscarMovimientoActivo(String criterio) {
         if (criterio == null || criterio.isBlank()) {
-        return null;
-    }
+            return null;
+        }
         String limpio = criterio.trim().toUpperCase();
 
-        if(DOCIDENTIDAD.matcher(limpio).matches()){
-            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+        if (DOCIDENTIDAD.matcher(limpio).matches()) {
+            Persona persona = personaService.buscarpersonaPorNumeroDocumento(limpio)
+                    .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
 
             return movimientoService.buscarMovimientoActivo(abonadoService.buscarAbonado(persona));
         }
 
-        if(PLACA.matcher(limpio).matches()){
-             
+        if (PLACA.matcher(limpio).matches()) {
+
             Vehiculo vehiculo = vehiculoService.buscarPorPlaca(limpio);
             return movimientoService.buscarMovimientoActivo(vehiculo).orElseThrow(
-                () -> new NoSuchElementException("No se encontró movimiento para el vehiculo: " + vehiculo.getId()));
+                    () -> new NoSuchElementException(
+                            "No se encontró movimiento para el vehiculo: " + vehiculo.getId()));
         }
 
         return null;

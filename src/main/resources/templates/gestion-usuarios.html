@@ -28,15 +28,19 @@
                 <p>Administración de operadores y accesos del sistema</p>
             </div>
 
-            <div class="col-3 buscador d-flex align-items-center justify-content-center">
-                <div class="position-relative">
-                    <input type="text" class="form-control ps-5 rounded-pill" placeholder="Buscar...">
-                    <i
-                        class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 "></i>
-                </div>
-            </div>
-
             
+                <div class="col-3 buscador d-flex align-items-center justify-content-center">
+                   <form th:action="@{/filtrar-usuarios}" method="get">
+                    <div class="position-relative">
+                        <input type="text" class="form-control ps-5 rounded-pill" placeholder="Buscar..." name="documentoIdentidad">
+                        <i
+                            class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 "></i>
+                    </div>
+                    </form>
+                </div>
+            
+
+
 
             <div class="col-4 d-flex align-items-center justify-content-end">
                 <a class="btn btn-nuevo-usuario btn-primary" href="/crearUsuario" role="button"><i

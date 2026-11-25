@@ -1,9 +1,11 @@
 package com.aparkautepino.aparkautepino.Controller;
 
-
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.aparkautepino.aparkautepino.Model.Dto.UsuarioFormDto;
 import com.aparkautepino.aparkautepino.Model.Entity.Vehiculo;
+import com.aparkautepino.aparkautepino.Model.Service.BusquedaService;
 import com.aparkautepino.aparkautepino.Model.Service.VehiculoService;
 
 import jakarta.validation.Valid;
@@ -25,11 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class VehiculosController {
 
     private final VehiculoService vehiculoService;
+    private final BusquedaService busquedaService;
 
-    
-
-    public VehiculosController(VehiculoService vehiculoService) {
+    public VehiculosController(VehiculoService vehiculoService,
+            BusquedaService busquedaService) {
         this.vehiculoService = vehiculoService;
+        this.busquedaService = busquedaService;
     }
 
     // Atributo global para este controller
@@ -40,12 +43,11 @@ public class VehiculosController {
 
     @GetMapping("/gestion-vehiculos")
     public String gestionVehiculos(@RequestParam(defaultValue = "0") int pagina,
-                                    Model model) {
-        
+            Model model) {
+
         Page<Vehiculo> vehiculos = vehiculoService.listarVehiculos(pagina);
 
         model.addAttribute("vehiculos", vehiculos);
-
 
         return "gestion-vehiculos";
     }
@@ -57,8 +59,7 @@ public class VehiculosController {
 
     @GetMapping("/actualizar-vehiculo/{id}")
     public String formularioActualizarVehiculo(@PathVariable int id,
-        Model model
-    ){
+            Model model) {
         Vehiculo vehiculo = vehiculoService.buscarVehiculo(id);
         model.addAttribute("vehiculo", vehiculo);
         return "crear-vehiculos";
@@ -109,5 +110,34 @@ public class VehiculosController {
             return "redirect:/crear-vehiculos";
         }
     }
-    
+
+    @GetMapping("/filtrar-vehiculos")
+    public String filtrar(
+            @RequestParam(required = false) String parametro,
+            @RequestParam(defaultValue = "0") int pagina,
+            Model model) {
+
+        Page<Vehiculo> vehiculos;
+
+        if (parametro == null || parametro.isBlank()) {
+
+            vehiculos = Page.empty(PageRequest.of(pagina, 10));
+        } else {
+            List<Vehiculo> encontrados = busquedaService.buscar(parametro);
+
+            if (encontrados != null || !encontrados.isEmpty()) {
+                vehiculos = new PageImpl<>(encontrados);
+            } else {
+                model.addAttribute("tipoModal", "notificacion");
+                model.addAttribute("mensaje", "No se encontraron vehiculos");
+                vehiculos = Page.empty();
+            }
+        }
+
+        model.addAttribute("parametro", parametro);
+        model.addAttribute("vehiculos", vehiculos); // ← ahora es un Page
+
+        return  "gestion-vehiculos";
+    }
+
 }

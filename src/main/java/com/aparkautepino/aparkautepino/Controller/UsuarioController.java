@@ -1,7 +1,11 @@
 package com.aparkautepino.aparkautepino.Controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,7 @@ import com.aparkautepino.aparkautepino.Model.Entity.Abonado;
 import com.aparkautepino.aparkautepino.Model.Entity.UsuarioSistema;
 import com.aparkautepino.aparkautepino.Model.Repository.TipoDocumentoRepository;
 import com.aparkautepino.aparkautepino.Model.Repository.UsuarioSistemaRepository;
+import com.aparkautepino.aparkautepino.Model.Service.BusquedaService;
 import com.aparkautepino.aparkautepino.Model.Service.UsuarioSistemaService;
 
 import jakarta.validation.Valid;
@@ -33,11 +38,14 @@ public class UsuarioController {
 
     private final UsuarioSistemaService usuarioService;
     private final TipoDocumentoRepository tipoDocumentoRepository;
+    private final BusquedaService busquedaService;
 
     public UsuarioController(UsuarioSistemaService usuarioService,
-            TipoDocumentoRepository tipoDocumentoRepository) {
+            TipoDocumentoRepository tipoDocumentoRepository,
+            BusquedaService busquedaService) {
         this.usuarioService = usuarioService;
         this.tipoDocumentoRepository = tipoDocumentoRepository;
+        this.busquedaService = busquedaService;
     }
 
     // Mostrar ventana login
@@ -56,7 +64,7 @@ public class UsuarioController {
     public String formularioEditarAbonado(@PathVariable int id,
             Model model) {
         UsuarioFormDto usuarioForm = usuarioService.obtenerFormulario(id);
-        
+
         model.addAttribute("usuarioForm", usuarioForm);
         model.addAttribute("tiposDocumento", tipoDocumentoRepository.findAll());
         return "crear-usuario";
@@ -142,5 +150,36 @@ public class UsuarioController {
             return "redirect:/reset-password?token=" + token;
         }
     }
+
+    @GetMapping("/filtrar-usuarios")
+public String filtrar(
+        @RequestParam(required = false) String documentoIdentidad,
+        @RequestParam(defaultValue = "0") int pagina,
+        Model model) {
+
+    Page<UsuarioSistema> usuarios;
+
+    if (documentoIdentidad == null || documentoIdentidad.isBlank()) {
+        // Sin DNI: página vacía, pero con la estructura de Page intacta
+        System.out.println("Mostrando pagina vacia");
+        usuarios = Page.empty(PageRequest.of(pagina, 10));
+    } else {
+        UsuarioSistema usuarioimpreso = busquedaService.bucarUsuarioporDocumentoIdentidad(documentoIdentidad).orElse(null);
+        System.out.println("Usuario conseguido: " + usuarioimpreso);
+        
+        usuarios = busquedaService.bucarUsuarioporDocumentoIdentidad(documentoIdentidad)
+                .map(u -> (Page<UsuarioSistema>) new PageImpl<>(List.of(u)))
+                .orElseGet(() -> {
+                    model.addAttribute("tipoModal", "notificacion");
+                    model.addAttribute("mensaje", "No se encontró usuario con DNI " + documentoIdentidad);
+                    return Page.empty();
+                });
+    }
+
+    model.addAttribute("documentoIdentidad", documentoIdentidad);
+    System.out.println("Ususario: " + usuarios.getContent().toString());
+    model.addAttribute("usuarios", usuarios); // ← ahora es un Page
+    return "gestion-usuarios";
+}
 
 }
