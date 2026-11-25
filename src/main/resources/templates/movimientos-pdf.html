@@ -1,55 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"></meta>
+    <meta charset="UTF-8" />
     <title>Reporte de Ingresos</title>
     <style>
-        /* Define el tamaño de página y márgenes */
-        @page { size: A4; margin: 15mm; }
-        body { font-family: "DejaVu Sans", sans-serif; font-size: 10pt; }
+        @page { size: A4 landscape; margin: 15mm; }
+        body { font-family: "DejaVu Sans", sans-serif; font-size: 10pt; color: #000; }
+        h1 { font-size: 16pt; margin: 0 0 5mm 0; }
+        .fecha { font-size: 9pt; color: #555; margin-bottom: 8mm; }
         .reporte-tabla { width: 100%; border-collapse: collapse; }
-        .reporte-tabla th, .reporte-tabla td { border: 0.2mm solid #ccc; padding: 3mm; }
-        .reporte-tabla th { background-color: #f2f2f2; text-align: left; }
-        .texto-derecha { text-align: right; }
+        .reporte-tabla th, .reporte-tabla td {
+            border: 0.2mm solid #999;
+            padding: 2mm;
+            font-size: 9pt;
+            vertical-align: top;
+        }
+        .reporte-tabla th { background-color: #eaeaea; text-align: left; font-weight: bold; }
+        .sin-datos { text-align: center; padding: 5mm; font-style: italic; }
     </style>
 </head>
 <body>
     <h1>Reporte de Ingresos al Estacionamiento</h1>
-    <p>Fecha de generación: <span th:text="${#dates.format(fechaGeneracion, 'dd/MM/yyyy HH:mm')}"></span></p>
+    <p class="fecha">
+        Fecha de generación:
+        <span th:text="${fechaGeneracion != null} ? ${#dates.format(fechaGeneracion, 'dd/MM/yyyy HH:mm')} : '—'"></span>
+    </p>
 
-                    <table class="table table-hover table-active table-bordered border-primary">
-                    <thead>
-                        <tr>
-                            <th scope="col">Placa</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Marca</th>
-                            <th scope="col">Modelo</th>
-                            <th scope="col">Color</th>
-                            <th scope="col">Propietario</th>
-                            <th scope="col">Fecha Ingreso</th>
-                            <th scope="col">Fecha Salida</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="movimiento : ${movimientos}">
-                            <td th:text="${movimiento.vehiculo.placa} ? ${movimiento.vehiculo.placa} : 'N/A' "></td>
-                            <td th:text="${movimiento.vehiculo.tipo}"></td>
-                            <td th:text="${movimiento.vehiculo.marca}"></td>
-                            <td th:text="${movimiento.vehiculo.modelo}"></td>
-                            <td th:text="${movimiento.vehiculo.color}"></td>
-                            <td
-                                th:text="${movimiento.vehiculo.propietario.nombres} + ' ' + ${movimiento.vehiculo.propietario.primerApellido}">
-                                @mdo</td>
-                            <td th:text="${#temporals.format(movimiento.fechaIngreso, 'dd/MM/yyyy - HH:mm')}"></td>
-
-                            <td th:text="${#temporals.format(movimiento.fechaSalida, 'dd/MM/yyyy - HH:mm')}"></td>
-                            <td th:text="${movimiento.estado}"></td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
+    <table class="reporte-tabla">
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Color</th>
+                <th>Propietario</th>
+                <th>Fecha Ingreso</th>
+                <th>Fecha Salida</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="movimiento : ${listaIngresos}">
+                <td th:text="${movimiento.vehiculo != null and movimiento.vehiculo.placa != null ? movimiento.vehiculo.placa : 'N/A'}"></td>
+                <td th:text="${movimiento.vehiculo != null ? movimiento.vehiculo.tipo : '—'}"></td>
+                <td th:text="${movimiento.vehiculo != null ? movimiento.vehiculo.marca : '—'}"></td>
+                <td th:text="${movimiento.vehiculo != null ? movimiento.vehiculo.modelo : '—'}"></td>
+                <td th:text="${movimiento.vehiculo != null ? movimiento.vehiculo.color : '—'}"></td>
+                <td th:text="${movimiento.vehiculo != null and movimiento.vehiculo.propietario != null ? movimiento.vehiculo.propietario.nombres + ' ' + movimiento.vehiculo.propietario.primerApellido : '—'}"></td>
+                <td th:text="${movimiento.fechaIngreso != null ? #temporals.format(movimiento.fechaIngreso, 'dd/MM/yyyy - HH:mm') : '—'}"></td>
+                <td th:text="${movimiento.fechaSalida != null ? #temporals.format(movimiento.fechaSalida, 'dd/MM/yyyy - HH:mm') : '—'}"></td>
+                <td th:text="${movimiento.estado != null ? movimiento.estado : '—'}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(listaIngresos)}">
+                <td colspan="9" class="sin-datos">No hay movimientos para mostrar.</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

@@ -35,11 +35,18 @@ public class MovimientosController {
     }
 
     @GetMapping("/historial")
-    public String historialMovimientos(@PageableDefault(size = 10) Pageable pageable,
+    public String historialMovimientos(@RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate desde,
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate hasta,
+            @RequestParam(required = false) String placa,
+            @RequestParam(required = false) String dni,
             Model model) {
 
-        model.addAttribute("movimientos", movimientoService.buscar(null, null, null, null, pageable));
-
+        model.addAttribute("movimientos", movimientoService.buscar(null, null, null, null, pagina));
+        model.addAttribute("desde", desde);
+        model.addAttribute("hasta", hasta);
+        model.addAttribute("placa", placa);
+        model.addAttribute("dni", dni);
         return "historial";
     }
 
@@ -49,10 +56,10 @@ public class MovimientosController {
             @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate hasta,
             @RequestParam(required = false) String placa,
             @RequestParam(required = false) String dni,
-            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(defaultValue = "0") int pagina,
             Model model) {
 
-        Page<Movimiento> page = movimientoService.buscar(desde, hasta, placa, dni, pageable);
+        Page<Movimiento> page = movimientoService.buscar(desde, hasta, placa, dni, pagina);
 
         model.addAttribute("movimientos", page);
         model.addAttribute("desde", desde);
@@ -63,21 +70,23 @@ public class MovimientosController {
     }
 
     @GetMapping("/reportes/movimientos/pdf")
-    public ResponseEntity<byte[]> descargarReporteIngresos(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate desde,
+    public ResponseEntity<byte[]> descargarReporteIngresos(
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate desde,
             @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate hasta,
             @RequestParam(required = false) String placa,
             @RequestParam(required = false) String dni,
-            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(defaultValue = "0") int pagina,
             Model model)
             throws IOException {
 
-                List<Movimiento> movimientos = movimientoService.buscar(desde, hasta, placa, dni, pageable).toList();
+                System.out.println("Filtros: " + desde + hasta + placa + dni);
+        List<Movimiento> movimientos = movimientoService.buscar(desde, hasta, placa, dni);
 
-                System.out.println("Voy a listar los movimientos");
-                for (Movimiento movimiento : movimientos) {
-                    System.out.println("Lista de movimientos: ");
-                    System.out.println(movimiento.getVehiculo().getPlaca());
-                }
+        System.out.println("Voy a listar los movimientos");
+        for (Movimiento movimiento : movimientos) {
+            System.out.println("Lista de movimientos: ");
+            System.out.println(movimiento.getVehiculo().getPlaca());
+        }
 
         // 2. Generar el PDF
         byte[] pdfBytes = reportePdfService.generarReporteIngresos(movimientos);

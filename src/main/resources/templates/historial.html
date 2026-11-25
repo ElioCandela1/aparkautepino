@@ -71,7 +71,13 @@
                         </div>
 
                         <div class="col-3 text-end">
-                            <a th:href="@{/reportes/movimientos/pdf}"><i class="fa-solid fa-file-pdf fs-4"></i></a>
+                            <a th:href="@{/reportes/movimientos/pdf(
+                                desde=${desde},
+                                hasta=${hasta},
+                                placa=${placa},
+                                dni=${dni})}">
+                                <i class="fa-solid fa-file-pdf fs-4"></i>
+                            </a>
                         </div>
 
                     </div>

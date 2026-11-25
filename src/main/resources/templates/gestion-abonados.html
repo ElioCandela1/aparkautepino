@@ -63,7 +63,7 @@
                             <td th:text="${abonado.persona.nombres} + ' ' + ${abonado.persona.primerApellido}"></td>
                             <td th:text="'ABONADO'"></td>
                             <td th:text="${abonado.activo} ? 'Activo': 'Inactivo'"></td>
-                            <td class="td-acciones">
+                            <td class="td-acciones text-center">
 
                                 <a th:href="@{/actualizar-abonado/{id}(id=${abonado.id})}" class="me-2">
                                     <i class="fa-solid fa-pen-to-square fs-6"></i>
@@ -72,14 +72,14 @@
 
                                 <!--button type="button"
                                     class="btn btn-editar btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i>
-                                </button-->
+                                </button>
                                 <div class="switch-container">
                                     <label class="switch">
                                         <input type="checkbox" id="estado" th:checked="${abonado.activo}">
                                         <span class="slider"></span>
                                     </label>
                                     <span id="estado-texto" class="estado-label fw-lighter">Inactivo</span>
-                                </div>
+                                </div-->
                             </td>
                         </tr>
 
@@ -174,7 +174,7 @@
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(solicitudes)}">
-                                <td colspan="6" class="text-center">Sin resultados</td>
+                                <td colspan="8" class="text-center">Sin resultados</td>
                             </tr>
                         </tbody>
                     </table>

@@ -43,8 +43,8 @@ public class MovimientoService {
     public MovimientoService(VehiculoService vehiculoService,
             MovimientoRepository movimientoRepository,
             AbonadoService abonadoService,
-            AsignarEspacioService asignarEspacioService, 
-            PersonaService personaService, 
+            AsignarEspacioService asignarEspacioService,
+            PersonaService personaService,
             EspacioService espacioService,
             List<ValidacionIngreso> validacionIngresos) {
         this.vehiculoService = vehiculoService;
@@ -63,7 +63,7 @@ public class MovimientoService {
 
         Abonado abonado = abonadoService.buscarAbonado(vehiculo.getPropietario());
 
-        for(ValidacionIngreso validacion : validacionIngresos){
+        for (ValidacionIngreso validacion : validacionIngresos) {
             System.out.println("Entre a validar");
             validacion.validar(vehiculo);
         }
@@ -106,7 +106,8 @@ public class MovimientoService {
     public void ingresarVehiculo(String numeroDocumento) {
 
         // Verificar que la persona existe y es un abonado
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(numeroDocumento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(numeroDocumento)
+                .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
         Abonado abonado = abonadoService.buscarAbonado(persona);
 
         if (!abonado.getActivo()) {
@@ -144,7 +145,8 @@ public class MovimientoService {
     @Transactional
     public void registarSalidaVehiculo(String documento) {
 
-        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento).orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
+        Persona persona = personaService.buscarpersonaPorNumeroDocumento(documento)
+                .orElseThrow(() -> new NoSuchElementException("Persona no registrada"));
         Abonado abonado = abonadoService.buscarAbonado(persona);
         Movimiento movimiento = movimientoRepository.findByAbonadoAndEstado(abonado, EstadoMovimiento.ACTIVO)
                 .orElseThrow(() -> new RuntimeException("No se encontró el abonado"));
@@ -189,11 +191,17 @@ public class MovimientoService {
     }
 
     public Page<Movimiento> buscar(LocalDate desde, LocalDate hasta,
-                               String placa, String dni, Pageable pageable) {
-    return movimientoRepository.findAll(
-            MovimientoSpec.conFiltros(desde, hasta, placa, dni),
-            pageable);
-}
+            String placa, String dni, int numeroPagina) {
+        Pageable pageable = PageRequest.of(numeroPagina, 10,
+                Sort.by("id").ascending());
+        return movimientoRepository.findAll(
+                MovimientoSpec.conFiltros(desde, hasta, placa, dni),
+                pageable);
+    }
 
+    public List<Movimiento> buscar(LocalDate desde, LocalDate hasta,
+            String placa, String dni){
+                return movimientoRepository.findAll(MovimientoSpec.conFiltros(desde, hasta, placa, dni));
+            }
 
 }
