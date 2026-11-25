@@ -3,6 +3,7 @@ package com.aparkautepino.aparkautepino.Controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +62,7 @@ public class SalidaVehiculoController {
             return "redirect:/ingresos/manual";
         }
 
-         ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(movimiento));
 
         try {
@@ -72,7 +73,7 @@ public class SalidaVehiculoController {
             redirectAttributes.addFlashAttribute("mensaje", e.getMessage());
         }
 
-        return "salida-vehiculo";
+        return "redirect:/salida-vehiculo";
     }
 
     @GetMapping("/salidas/automatico/{numeroDocumento}")
@@ -95,19 +96,28 @@ public class SalidaVehiculoController {
             @ModelAttribute("movimiento") Movimiento movimiento,
             Model model) {
 
-        Movimiento encontrado = busquedaService.buscarMovimientoActivo(criterio);
+        
+        try {
+            Movimiento encontrado = busquedaService.buscarMovimientoActivo(criterio);
 
+            movimiento.setId(encontrado.getId());
+            movimiento.setAbonado(encontrado.getAbonado());
+            movimiento.setEspacio(encontrado.getEspacio());
+            movimiento.setFechaIngreso(encontrado.getFechaIngreso());
+            movimiento.setVehiculo(encontrado.getVehiculo());
 
-        System.out.println(encontrado.getAbonado().getPersona().getNombreCompleto());
+            model.addAttribute("fechaActual", LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("dd-MM-yyyy' 'HH:mm")));
+        } catch (NoSuchElementException e) {
+            
+            model.addAttribute("tipoModal", "notificacion");
+            model.addAttribute("mensaje", e.getMessage());
 
-        movimiento.setId(encontrado.getId());
-        movimiento.setAbonado(encontrado.getAbonado());
-        movimiento.setEspacio(encontrado.getEspacio());
-        movimiento.setFechaIngreso(encontrado.getFechaIngreso());
-        movimiento.setVehiculo(encontrado.getVehiculo());
-
-        model.addAttribute("fechaActual", LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy' 'HH:mm")));
+        } catch (Exception e) {
+            
+            model.addAttribute("tipoModal", "notificacion");
+            model.addAttribute("mensaje", e.getMessage());
+        }
 
         return "salida-vehiculo";
     }
