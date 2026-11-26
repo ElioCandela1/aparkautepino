@@ -50,8 +50,14 @@
                         <p class="card-text fs-6 text-muted mb-3" th:text="'Capacidad total: ' + ${capacidadVehiculosPesado}">Capacidad total: 31</p>
                         <!-- Barra de progreso visual (opcional) -->
                         <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 96%;" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+    <div class="progress-bar bg-success"
+         role="progressbar"
+         th:style="'width:' + (${disponiblesVehiculosPesados * 100.0 / capacidadVehiculosPesado}) + '%'"
+         th:attr="aria-valuenow=${disponiblesVehiculosPesados * 100.0 / capacidadVehiculosPesado}"
+         aria-valuemin="0"
+         aria-valuemax="100">
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -69,8 +75,14 @@
                             th:text="'Porcentaje de ocupación: ' + ${(ocupadosVehiculosPesados * 100) / capacidadVehiculosPesado} + '%'">
                         </p>
                         <div class="progress" style="height: 6px;">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 3%;" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+    <div class="progress-bar bg-danger"
+         role="progressbar"
+         th:style="'width:' + (${ocupadosVehiculosPesados * 100.0 / capacidadVehiculosPesado}) + '%'"
+         th:attr="aria-valuenow=${ocupadosVehiculosPesados * 100.0 / capacidadVehiculosPesado}"
+         aria-valuemin="0"
+         aria-valuemax="100">
+    </div>
+</div>
                     </div>
                 </div>
             </div>

@@ -69,9 +69,11 @@ public class SolicitudIngresoController {
     @GetMapping("/solicitudes-usuarios")
     public String mostrarSolicitudesUsuarios(Model model, @RequestParam (defaultValue = "0") int pagina) {
 
+        List<SolicitudAbonado> solicitudes = solicitudAbonadoService.listarSolicitudesPedientes();
         Page<Abonado> abonados = abonadoService.listarAbodanos(pagina);
         model.addAttribute("abonados", abonados);
         model.addAttribute("abrirModal", "solicitudes");
+        model.addAttribute("solicitudes", solicitudes);
         return "gestion-abonados";
     }
 }

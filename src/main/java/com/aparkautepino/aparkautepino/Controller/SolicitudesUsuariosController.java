@@ -108,6 +108,7 @@ public class SolicitudesUsuariosController {
         }
     }
 
+    /* 
     @GetMapping("/listar-solicitudes")
     public String mostrarSolicitudesUsuarios(Model model) {
 
@@ -130,5 +131,5 @@ public class SolicitudesUsuariosController {
         }
 
         return "redirect:/solicitudes-usuarios";
-    }
+    }*/
 }
