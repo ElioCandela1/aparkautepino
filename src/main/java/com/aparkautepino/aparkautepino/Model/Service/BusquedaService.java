@@ -25,7 +25,7 @@ public class BusquedaService {
     private final VehiculoService vehiculoService;
     private final UsuarioSistemaService usuarioSistemaService;
     private static final Pattern PLACA = Pattern.compile("^[A-Z]{3}-?\\d{3,4}$");
-    private static final Pattern DOCIDENTIDAD = Pattern.compile("^\\d{8}$");
+    private static final Pattern DOCIDENTIDAD = Pattern.compile("^\\d{8,9}$");
 
     public BusquedaService(PersonaService personaService, AbonadoService abonadoService,
             VehiculoService vehiculoService, MovimientoService movimientoService,
