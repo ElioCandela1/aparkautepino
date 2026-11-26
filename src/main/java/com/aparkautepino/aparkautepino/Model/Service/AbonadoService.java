@@ -38,6 +38,11 @@ public class AbonadoService {
                 .orElseThrow(() -> new RuntimeException("Usuario no registrado"));
     }
 
+    public Optional<Abonado> buscarAbonadoOptional(Persona persona) {
+
+        return abonadoRepository.findByPersona(persona);
+    }
+
     public Abonado buscarAbonado(int id) {
 
         return abonadoRepository.findById(id)

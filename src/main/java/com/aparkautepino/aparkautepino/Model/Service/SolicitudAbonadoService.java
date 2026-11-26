@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.aparkautepino.aparkautepino.Model.Dto.PersonaDto;
@@ -44,7 +46,7 @@ public class SolicitudAbonadoService {
 
         try {
             persona = personaService.buscarpersonaPorNumeroDocumento(personaDto.getNumeroDocumento())
-            .orElseThrow(() -> new NoSuchElementException("Persona no encontrada"));
+                    .orElseThrow(() -> new NoSuchElementException("Persona no encontrada"));
         } catch (RuntimeException e) {
             persona = personaService.crearPersona(personaDto);
         }
@@ -71,34 +73,30 @@ public class SolicitudAbonadoService {
 
         if (solicitudAbonado.getTipoVehiculo().equals(TipoVehiculo.AUTOMOVIL)
                 || solicitudAbonado.getTipoVehiculo().equals(TipoVehiculo.MOTO)) {
-            try {
-                vehiculoService.buscarPorPlaca(solicitudAbonado.getPlaca());
-                throw new IllegalStateException("Ya existe un vehículo con placa " + solicitudAbonado.getPlaca());
-            } catch (NoSuchElementException e) {
-                // no existe → OK
-            }
 
+            Optional<Vehiculo> existente = vehiculoService.buscarPorPlacaOptional(solicitudAbonado.getPlaca());
+            if (existente.isPresent()) {
+                throw new IllegalStateException("Ya existe un vehículo con placa " + solicitudAbonado.getPlaca());
+            }
         }
 
         solicitudAbonado.setEstado(EstadoSolicitud.APROBADA);
         solicitudAbonado.setFechaRespuesta(LocalDateTime.now());
-        // solicitudAbonadoRepository.save(solicitudAbonado);
+        solicitudAbonadoRepository.save(solicitudAbonado);
 
-        Abonado abonado;
-
-        // Si el abonado ya existe se actualiza la información del abonado
-        try {
-            Abonado abonadoExistente = abonadoService.buscarAbonado(solicitudAbonado.getPersona());
-            abonadoExistente.setTipo(solicitudAbonado.getTipoAbonado());
-            abonadoExistente.setFechaAprobacion(solicitudAbonado.getFechaRespuesta());
-            abonado = abonadoExistente;
-        } catch (NoSuchElementException e) {
-            abonado = Abonado.builder()
-                    .persona(solicitudAbonado.getPersona())
-                    .tipo(solicitudAbonado.getTipoAbonado())
-                    .fechaAprobacion(solicitudAbonado.getFechaRespuesta())
-                    .build();
-        }
+        // 5. Crear o actualizar abonado
+        Persona persona = solicitudAbonado.getPersona();
+        Abonado abonado = abonadoService.buscarAbonadoOptional(persona)
+                .map(existente -> {
+                    existente.setTipo(solicitudAbonado.getTipoAbonado());
+                    existente.setFechaAprobacion(solicitudAbonado.getFechaRespuesta());
+                    return existente;
+                })
+                .orElseGet(() -> Abonado.builder()
+                        .persona(persona)
+                        .tipo(solicitudAbonado.getTipoAbonado())
+                        .fechaAprobacion(solicitudAbonado.getFechaRespuesta())
+                        .build());
 
         abonadoService.registarAbonado(abonado);
 
@@ -108,10 +106,14 @@ public class SolicitudAbonadoService {
                 .marca(solicitudAbonado.getMarca())
                 .modelo(solicitudAbonado.getModelo())
                 .color(solicitudAbonado.getColor())
-                .propietario(solicitudAbonado.getPersona())
+                .propietario(persona)
                 .activo(true)
                 .build();
-        vehiculoService.guardarVehiculo(vehiculo);
+        try {
+            vehiculoService.guardarVehiculo(vehiculo);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("Ya existe un vehículo con placa " + solicitudAbonado.getPlaca(), e);
+        }
 
     }
 

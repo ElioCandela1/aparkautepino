@@ -2,6 +2,7 @@ package com.aparkautepino.aparkautepino.Model.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,38 +34,44 @@ public class VehiculoService {
 
     }
 
-    public Vehiculo buscarVehiculo(int id){
+    public Vehiculo buscarVehiculo(int id) {
         return vehiculoRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("No se ha podido encontrar el vehiculo"));
+                .orElseThrow(() -> new NoSuchElementException("No se ha podido encontrar el vehiculo"));
     }
 
     public Vehiculo buscarPorPlaca(String placa) {
-      
-        return vehiculoRepository.findByPlaca(placa).orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo con placa " + placa));
+
+        return vehiculoRepository.findByPlaca(placa)
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo con placa " + placa));
+    }
+
+    public Optional<Vehiculo> buscarPorPlacaOptional(String placa) {
+
+        return vehiculoRepository.findByPlaca(placa);
     }
 
     public List<Vehiculo> buscarPorPropietario(Persona persona) {
-        
-       return vehiculoRepository.findAllByPropietario(persona);
+
+        return vehiculoRepository.findAllByPropietario(persona);
     }
 
-    public Page<Vehiculo> listarVehiculos(int numeroPagina){
+    public Page<Vehiculo> listarVehiculos(int numeroPagina) {
         Pageable pageable = PageRequest.of(numeroPagina,
-            10, 
-            Sort.by("id").ascending()
-        );
+                10,
+                Sort.by("id").ascending());
 
         return vehiculoRepository.findAll(pageable);
     }
 
-    @Transactional 
+    @Transactional
     public void actualizarVehiculo(Vehiculo vehiculo) {
-        
-        Vehiculo vehiculoPersistido = vehiculoRepository.findById(vehiculo.getId())
-            .orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo"));
 
-        Persona propietario = personaService.buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento())
-        .orElseThrow(() -> new NoSuchElementException("No se encontró el propietario"));
+        Vehiculo vehiculoPersistido = vehiculoRepository.findById(vehiculo.getId())
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el vehiculo"));
+
+        Persona propietario = personaService
+                .buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento())
+                .orElseThrow(() -> new NoSuchElementException("No se encontró el propietario"));
         vehiculoPersistido.setActivo(vehiculo.getActivo());
         vehiculoPersistido.setColor(vehiculo.getColor());
         vehiculoPersistido.setMarca(vehiculo.getMarca());
@@ -77,8 +84,10 @@ public class VehiculoService {
     @Transactional
     public void crearVehiculo(Vehiculo vehiculo) {
         System.out.println("Encontré el propietario");
-        Persona propietario = personaService.buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento()).orElseThrow(() -> new RuntimeException("No se encontró el propietario"));
-        
+        Persona propietario = personaService
+                .buscarpersonaPorNumeroDocumento(vehiculo.getPropietario().getNumeroDocumento())
+                .orElseThrow(() -> new RuntimeException("No se encontró el propietario"));
+
         vehiculo.setPropietario(propietario);
         vehiculoRepository.save(vehiculo);
 
